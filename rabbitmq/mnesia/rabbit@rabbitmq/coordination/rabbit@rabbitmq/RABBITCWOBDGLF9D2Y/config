@@ -4,8 +4,8 @@
               #{member => {rabbitmq_metadata,rabbit@rabbitmq},
                 store_id => rabbitmq_metadata}},
   friendly_name => "RabbitMQ metadata store",
-  cluster_name => rabbitmq_metadata,uid => <<"RABBITH1E0GOCZMXJ6">>,
+  cluster_name => rabbitmq_metadata,uid => <<"RABBITCWOBDGLF9D2Y">>,
   initial_members => [],
-  log_init_args => #{uid => <<"RABBITH1E0GOCZMXJ6">>},
+  log_init_args => #{uid => <<"RABBITCWOBDGLF9D2Y">>},
   tick_timeout => 1000,broadcast_time => 100,
   install_snap_rpc_timeout => 120000,await_condition_timeout => 30000}.
