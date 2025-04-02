@@ -21,7 +21,7 @@ services:
     container_name: first-ml-service-container-nginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - '80:443'
     depends_on:
       app:
         condition: service_healthy
@@ -52,6 +52,6 @@ services:
     volumes:
       - ./rabbitmq:/var/lib/rabbitmq
     ports:
-      - 15672:15672
+      - '15672:5672'
 
 
