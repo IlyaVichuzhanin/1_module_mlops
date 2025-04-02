@@ -137,7 +137,7 @@ venv.bak/
 
 
 #Postgress
-/pg-data/
+/pg-data
 
 # Spyder project settings
 .spyderproject
