@@ -2,6 +2,7 @@ from models.transaction import Transaction
 from models.user import User
 
 
+
 class Admin:
 
     def __init__(self, email:str, password:str):
