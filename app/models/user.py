@@ -1,5 +1,6 @@
 from models.transaction import Transaction
-from app.models.requestresponce import RequestResponce
+from models.request import Request
+from models.responce import Responce
 from models.balance import Balance
 import datetime
 import bcrypt
@@ -12,7 +13,8 @@ class User:
         self.__email = email
         self.__password = bcrypt.hashpw(password=my_password, salt=bcrypt.gensalt())
         self.__list_transaction = [Transaction]
-        self.__list_prediction = [RequestResponce]
+        self.__list_request = [Request]
+        self.__list_responce = [Responce]
         self.__creditBalance = Balance
     
     @property
@@ -28,8 +30,12 @@ class User:
         return self.__list_transaction
 
     @property
-    def predictions(self):
-        return self.__list_prediction
+    def requests(self):
+        return self.__list_request
+    
+    @property
+    def responce(self):
+        return self.__list_responce
 
     @property
     def creditBalance(self):

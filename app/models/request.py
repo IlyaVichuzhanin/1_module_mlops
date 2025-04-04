@@ -2,10 +2,7 @@ import datetime
 from tkinter import Image
 
 
-class RequestResponce:
-
-    responce : str
-    responceDateTime : datetime
+class Request:
 
     def __init__(self, request:Image, requestDateTime:datetime):
         self.__request = request
