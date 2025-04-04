@@ -1,25 +1,47 @@
 from models.transaction import Transaction
-from models.prediction import Prediction
+from app.models.requestresponce import Prediction
+from models.balance import Balance
 import datetime
+import bcrypt
 
 
 class User:
 
-    def __init__(self, userName:str, email:str, password:str) -> None:
-        self.userName = userName
-        self.email = email
-        self.password = password
-        self.list_transaction = [Transaction]
-        self.list_prediction = [Prediction]
-        self.creditBalance = 0
+    def __init__(self, userName:str, email:str, my_password:str) -> None:
+        self.__userName = userName
+        self.__email = email
+        self.__password = bcrypt.hashpw(password=my_password, salt=bcrypt.gensalt())
+        self.__list_transaction = [Transaction]
+        self.__list_prediction = [Prediction]
+        self.__creditBalance = Balance
+    
+    @property
+    def userName(self):
+        return self.__userName
+
+    @property
+    def email(self):
+        return self.__email
+    
+    @property
+    def transactions(self):
+        return self.__list_transaction
+
+    @property
+    def predictions(self):
+        return self.__list_prediction
+
+    @property
+    def creditBalance(self):
+        return self.__creditBalance   
 
     def __str__(self) -> str:
         return "{self.id} + {self.email}"
 
-    def authoriseUser(self, emailOrUserName:str, password:str):
+    def authorise(self, emailOrUserName:str, password:str):
         pass
 
-    def registerUser(self, userName:str, email:str, password:str):
+    def register(self, userName:str, email:str, password:str):
         pass
 
     def increasBalance(self, transaction:Transaction):
