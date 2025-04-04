@@ -3,7 +3,7 @@ from models.user import User
 
 
 
-class Admin:
+class Admin(User):
 
     def __init__(self, email:str, password:str):
         self.email = email
@@ -22,5 +22,5 @@ class Admin:
         pass
 
     def increaseCreditBalance(self, user:User, transaction:Transaction):
-        user.creditBalance+=transaction.credits
+        user.creditBalance.increaseBalance(transaction)
         
