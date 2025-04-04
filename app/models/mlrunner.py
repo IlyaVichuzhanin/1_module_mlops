@@ -1,5 +1,5 @@
 from models.transaction import Transaction
-from app.models.requestresponce import RequestResponce
+from models.requestresponce import RequestResponce
 from models.user import User
 from models.mlmodel import MLmodel
 

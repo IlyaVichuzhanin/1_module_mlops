@@ -1,5 +1,5 @@
 from models.transaction import Transaction
-from app.models.requestresponce import RequestResponce
+from models.requestresponce import RequestResponce
 from models.balance import Balance
 import datetime
 import bcrypt
