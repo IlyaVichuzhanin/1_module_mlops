@@ -1,5 +1,5 @@
 from models.transaction import Transaction
-from models.request import RequestResponce
+from models.request import Request
 from models.user import User
 from models.mlmodel import MLmodel
 
@@ -18,10 +18,10 @@ class MlRunner:
     def mlmodel(self):
         return self.__mlmodel
 
-    def makePrediction(self, mlmodel:MLmodel, requestResponce:RequestResponce):
+    def makePrediction(self, mlmodel:MLmodel, requestResponce:Request):
         pass
 
-    def validateRequestData(self, requestResponce:RequestResponce):
+    def validateRequestData(self, requestResponce:Request):
         pass
 
 
