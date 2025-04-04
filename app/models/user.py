@@ -1,5 +1,5 @@
 from models.transaction import Transaction
-from app.models.requestresponce import Prediction
+from app.models.requestresponce import RequestResponce
 from models.balance import Balance
 import datetime
 import bcrypt
@@ -12,7 +12,7 @@ class User:
         self.__email = email
         self.__password = bcrypt.hashpw(password=my_password, salt=bcrypt.gensalt())
         self.__list_transaction = [Transaction]
-        self.__list_prediction = [Prediction]
+        self.__list_prediction = [RequestResponce]
         self.__creditBalance = Balance
     
     @property
@@ -43,9 +43,6 @@ class User:
 
     def register(self, userName:str, email:str, password:str):
         pass
-
-    def increasBalance(self, transaction:Transaction):
-        self.creditBalance+=transaction.credits
 
     def exit(self):
         pass   
