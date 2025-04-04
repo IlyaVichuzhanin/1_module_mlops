@@ -31,7 +31,7 @@ class User:
 
     @property
     def requests(self):
-        return self.__list_requests
+        return self.__list_request
     
     @property
     def responce(self):
