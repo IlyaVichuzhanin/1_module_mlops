@@ -12,5 +12,8 @@ class TransactionMaker:
         self.__user.creditBalance.increaseBalance(transaction)
 
     def decreaseBalance(self, transaction:Transaction):
-        self.__user.creditBalance.decreaseBalanceBalance(transaction)
+        self.__user.creditBalance.decreaseBalance(transaction)
+
+
+    
         
