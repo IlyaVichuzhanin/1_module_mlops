@@ -24,7 +24,7 @@ def init_db():
     SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
 
-    test_user_1 = User(id=1,user_name="Bob", password="123")
+    test_user_1 =  User(id=1,email="Bob@yandex.ru", password="123", transactions=[Transaction], requests=[Request], responses=[Response], balance=Balance)
     create_user(test_user_1)
     test_user_2 = User(id=2,user_name="Sam", password="123")
     create_user(test_user_2)
