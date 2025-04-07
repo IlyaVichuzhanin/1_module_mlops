@@ -18,10 +18,10 @@ class MlRunner:
     def mlmodel(self):
         return self.__mlmodel
 
-    def makePrediction(self, mlmodel:MLmodel, requestResponce:Request):
+    def makePrediction(self, mlmodel:MLmodel, request:Request):
         pass
 
-    def validateRequestData(self, requestResponce:Request):
+    def validateRequestData(self, request:Request):
         pass
 
 
