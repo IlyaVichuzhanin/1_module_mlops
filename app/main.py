@@ -7,6 +7,10 @@ if TYPE_CHECKING:
     from database.database import init_db, engine
     from services.crud.user import create_user, get_all_users
     from models.user import User
+    from models.transaction import Transaction
+    from models.request import Request
+    from models.response import Response
+    from models.balance import Balance
 
 
 # app=FastAPI()
@@ -23,7 +27,7 @@ if TYPE_CHECKING:
 
 
 if __name__ == "__main__":
-    test_user = User(id=1,user_name="Bob", password="123")
+    test_user =  User(id=1,email="Bob@yandex.ru", password="123", transactions=[Transaction], requests=[Request], responses=[Response], balance=Balance)
     test_user2 = User(id=1,user_name="Jane", password="123")
 
     init_db()
