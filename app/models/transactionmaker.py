@@ -9,10 +9,12 @@ class TransactionMaker:
         self.__user=user
     
     def increaseBalance(self, transaction:Transaction):
-        self.__user.creditBalance.increaseBalance(transaction)
+        # self.__user.creditBalance.increaseBalance(transaction)
+        pass
 
     def decreaseBalance(self, transaction:Transaction):
-        self.__user.creditBalance.decreaseBalance(transaction)
+        # self.__user.creditBalance.decreaseBalance(transaction)
+        pass
 
 
     
