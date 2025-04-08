@@ -2,6 +2,8 @@
 from typing import TYPE_CHECKING
 from fastapi import FastAPI
 from sqlmodel import Session
+from typing import Union
+from pathlib import Path
 import uvicorn
 if TYPE_CHECKING:
     from database.database import init_db, engine
@@ -9,17 +11,12 @@ if TYPE_CHECKING:
     from models.user import User
 
 
-# app=FastAPI()
-
-# @app.get('/')
-
-# def index():
-#     user_nick = User("123", "123", "123")
-#     return "Hello world!" + str(user_nick)w
+app = FastAPI(title="FastAPI, Docker, and Traefik")
 
 
-# if __name__ == "__main__":
-#     uvicorn.run('main:app', host='0.0.0.0', port=8080, reload=True)
+@app.get('/')
+def index():
+   return {'message': 'Everything online'}
 
 
 if __name__ == "__main__":
