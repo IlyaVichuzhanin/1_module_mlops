@@ -20,7 +20,7 @@ def index():
 
 
 if __name__ == "__main__":
-    test_user = User(id=1,user_name="Bob", password="123")
+    test_user =  User(id=1,email="Bob@yandex.ru", password="123")
     test_user2 = User(id=1,user_name="Jane", password="123")
 
     init_db()
@@ -31,9 +31,11 @@ if __name__ == "__main__":
         create_user(test_user2, session)
         users=get_all_users(session)
     
-    for user in users:
-        print(f'id: {user.id} - {user.email}')
-        print(type(user))
+        for user in users:
+            print(f'id: {user.id} - {user.email}')
+            print(type(user))
+
+        
 
 
 

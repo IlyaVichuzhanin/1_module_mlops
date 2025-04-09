@@ -12,7 +12,7 @@ def get_transaction_by_id(id:int, session) -> Optional[Transaction]:
         return transaction
     return None
 
-def get_user_transactions(user_id:str, session) -> Optional[List[Transaction]]:
+def get_user_transactions(user_id:int, session) -> Optional[List[Transaction]]:
     return session.query(Transaction).filter(Transaction.user_id==user_id).all()
 
 

@@ -12,7 +12,7 @@ def get_user_by_id(id:int, session) -> Optional[User]:
         return user
     return None
 
-def get_user_by_email(email:str, session) -> Optional[User]:
+def get_user_by_email(email:int, session) -> Optional[User]:
     user = session.query(User).filter(User.email==email).first()
     if user:
         return user

@@ -12,7 +12,7 @@ def get_responce_by_id(id:int, session) -> Optional[Response]:
         return responce
     return None
 
-def get_user_responses(user_id:str, session) -> Optional[List[Response]]:
+def get_user_responses(user_id:int, session) -> Optional[List[Response]]:
     return session.query(Response).filter(Response.user_id==user_id).all()
 
 
