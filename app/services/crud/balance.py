@@ -1,4 +1,5 @@
 import uuid
+from models.user import User
 from models.balance import Balance
 from models.transaction import Transaction
 from typing import List, Optional
@@ -21,8 +22,8 @@ def get_balance_by_user_id(user_id:uuid.UUID, session) -> Optional[Balance]:
         return balance
     return None
 
-def increase_user_balance(user_id:uuid.UUID, transaction:Transaction, session) -> None:
-    balance = session.query(Balance).filter(Balance.user_id==user_id)
+def increase_user_balance(user:User, transaction:Transaction, session) -> None:
+    balance = session.query(Balance).filter(Balance.user_id==user.id)
     if balance:
         create_transaction(transaction, session)
         balance.current_balance += transaction.credits
@@ -33,8 +34,8 @@ def increase_user_balance(user_id:uuid.UUID, transaction:Transaction, session) -
     return None
 
 
-def decrease_user_balance(user_id:uuid.UUID, transaction:Transaction, session) -> None:
-    balance = session.query(Balance).filter(Balance.user_id==user_id)
+def decrease_user_balance(user:User, transaction:Transaction, session) -> None:
+    balance = session.query(Balance).filter(Balance.user_id==user.id)
     if balance:
         if balance.current_balance>=transaction.credits:
             create_transaction(transaction, session)
