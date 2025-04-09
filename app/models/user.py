@@ -1,10 +1,11 @@
 from typing import Optional, List
+import uuid
 from sqlmodel import SQLModel, Field, Relationship
 from typing import TYPE_CHECKING
 
 
 class User(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+    id: uuid.UUID = Field(default=None, primary_key=True)
     email: str = Field(default=None)
     password: str = Field(default=None)
     transactions: Optional[List["Transaction"]] = Relationship(back_populates="user")

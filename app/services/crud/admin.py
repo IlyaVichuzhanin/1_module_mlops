@@ -1,3 +1,4 @@
+import uuid
 from models.admin import Admin
 from typing import List, Optional
 
@@ -5,7 +6,7 @@ from typing import List, Optional
 def get_all_admins(session)->List[Admin]:
     return session.query(Admin).all()
 
-def get_admin_by_id(id:int, session) -> Optional[Admin]:
+def get_admin_by_id(id:uuid.UUID, session) -> Optional[Admin]:
     admin=session.get(Admin, id)
     if admin:
         return admin
@@ -23,7 +24,7 @@ def create_admin(new_admin: Admin, session) -> None:
     session.commit()
     session.refresh(new_admin)
 
-def delete_admin_by_id(id:int, session) -> None:
+def delete_admin_by_id(id:uuid.UUID, session) -> None:
     admin = session.get(Admin, id)
     if admin:
         session.delete[admin]

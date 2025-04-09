@@ -21,7 +21,7 @@ def index():
 
 if __name__ == "__main__":
     test_user =  User(id=1,email="Bob@yandex.ru", password="123")
-    test_user2 = User(id=1,user_name="Jane", password="123")
+    test_user2 = User(id=1,email="Jane@yandex.ru", password="123")
 
     init_db()
     print("Init db has been succeded")
