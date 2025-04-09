@@ -7,13 +7,13 @@ from typing import List, Optional
 def get_all_transactions(session)->List[Transaction]:
     return session.query(Transaction).all()
 
-def get_transaction_by_id(id:int, session) -> Optional[Transaction]:
+def get_transaction_by_id(id:int, session) -> Transaction:
     transaction=session.get(Transaction, id)
     if transaction:
         return transaction
     return None
 
-def get_user_transactions(user_id:uuid.UUID, session) -> Optional[List[Transaction]]:
+def get_user_transactions(user_id:uuid.UUID, session) -> List[Transaction]:
     return session.query(Transaction).filter(Transaction.user_id==user_id).all()
 
 

@@ -10,7 +10,8 @@ from database.database import init_db, engine
 from services.crud.user import create_user, get_all_users
 from models.user import User
 from models.transaction import Transaction 
-from services.crud.balance import create_balance, increase_user_balance, decrease_user_balance  
+from services.crud.balance import create_balance, increase_user_balance, decrease_user_balance 
+from services.crud.transaction import get_user_transactions 
 
 
 app = FastAPI(title="FastAPI, Docker, and Traefik")
@@ -37,13 +38,18 @@ if __name__ == "__main__":
             print(f'id: {user.id} - {user.email}')
             print(type(user))
 
-    with Session(engine) as session:
+    with Session(engine) as session2:
         test_transaction_1=Transaction(id=uuid.uuid1, credits=54, date_time='11.05.2025', user_id=test_user1.id, user=test_user1)
-        increase_user_balance(test_user1, test_transaction_1)
+        increase_user_balance(test_user1, test_transaction_1, session2)
         test_transaction_2=Transaction(id=uuid.uuid1, credits=8, date_time='13.06.2025', user_id=test_user1.id, user=test_user1)
-        decrease_user_balance(test_user1, test_transaction_2)
+        decrease_user_balance(test_user1, test_transaction_2, session2)
         test_transaction_3=Transaction(id=uuid.uuid1, credits=100, date_time='16.07.2025', user_id=test_user1.id, user=test_user1)
-        decrease_user_balance(test_user1, test_transaction_3)
+        decrease_user_balance(test_user1, test_transaction_3, session2)
+        transactions = get_user_transactions(user_id=test_user1.id, session=session2)
+
+        for transaction in transactions:
+            print(f'user_email: {transaction.user.email} - {transaction.credits} - {transaction.date_time}')
+            print(type(transaction))
 
 
         

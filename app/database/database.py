@@ -26,32 +26,32 @@ def init_db():
     SQLModel.metadata.create_all(engine)
 
     test_user_1 = User(id=uuid.uuid1,email="Bob", password="123")
-    create_user(test_user_1)
+    create_user(test_user_1, get_session)
     test_user_2 = User(id=uuid.uuid1,email="Sam", password="123")
-    create_user(test_user_2)
+    create_user(test_user_2, get_session)
     test_user_3 = User(id=uuid.uuid1,email="Alice", password="123")
-    create_user(test_user_3)
+    create_user(test_user_3, get_session)
     test_admin_1 = Admin(id=uuid.uuid1,email="Jack", password="123")
-    create_admin(test_admin_1)
+    create_admin(test_admin_1, get_session)
 
     test_transaction_1=Transaction(id=uuid.uuid1, credits=12, date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
-    increase_user_balance(test_user_1, test_transaction_1)
+    increase_user_balance(test_user_1, test_transaction_1, get_session)
     test_transaction_2=Transaction(id=uuid.uuid1, credits=5, date_time='17.01.2025', user_id=test_user_1.id, user=test_user_1)
-    decrease_user_balance(test_user_1, test_transaction_2)
+    decrease_user_balance(test_user_1, test_transaction_2, get_session)
     test_transaction_3=Transaction(id=uuid.uuid1, credits=100, date_time='19.01.2025', user_id=test_user_1.id, user=test_user_1)
-    decrease_user_balance(test_user_1, test_transaction_3)
+    decrease_user_balance(test_user_1, test_transaction_3, get_session)
 
 
     test_response_1 = Response(id=uuid.uuid1, response="some response", date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
-    create_response(test_response_1)
+    create_response(test_response_1, get_session)
     test_request_1 = Request(id=uuid.uuid1, image=bytearray, date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
-    create_request(test_request_1)
+    create_request(test_request_1, get_session)
 
 
     test_response_2 = Response(id=uuid.uuid1, response="some response", date_time='12.01.2025', user_id=test_user_2.id, user=test_user_2)
-    create_response(test_response_2)
+    create_response(test_response_2, get_session)
     test_request_2 = Request(id=uuid.uuid1, image=bytearray, date_time='12.01.2025', user_id=test_user_2.id, user=test_user_2)
-    create_request(test_request_1)
+    create_request(test_request_1, get_session)
     
     
 
