@@ -1,3 +1,12 @@
+from sqlmodel import SQLModel, Session, create_engine
+from database.config import get_settings
+
+
+
+engine = create_engine(url=get_settings().DATABASE_URL_psycopg, echo=True,pool_size=5, max_overflow=10)
+
+
+
 
 from typing import TYPE_CHECKING
 from fastapi import FastAPI
@@ -5,10 +14,10 @@ from sqlmodel import Session
 from typing import Union
 from pathlib import Path
 import uvicorn
-if TYPE_CHECKING:
-    from database.database import init_db, engine
-    from services.crud.user import create_user, get_all_users
-    from models.user import User
+from database.database import init_db, engine
+from services.crud.user import create_user, get_all_users
+from models.user import User
+    
 
 
 app = FastAPI(title="FastAPI, Docker, and Traefik")
