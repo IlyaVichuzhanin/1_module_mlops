@@ -68,19 +68,19 @@ services:
     tty: true
     stdin_open: true
       
-  rabbitmq:
-    image: rabbitmq:latest
-    container_name: first-ml-service-container-rabbitmq
-    hostname: rabbitmq
-    restart: on-failure
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-    volumes:
-      - ./rabbitmq:/var/lib/rabbitmq
-    ports:
-      - '8888:5672'
-      - '7777:15672'
+  # rabbitmq:
+  #   image: rabbitmq:latest
+  #   container_name: first-ml-service-container-rabbitmq
+  #   hostname: rabbitmq
+  #   restart: on-failure
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+  #     - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+  #   volumes:
+  #     - ./rabbitmq:/var/lib/rabbitmq
+  #   ports:
+  #     - '8888:5672'
+  #     - '7777:15672'
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4_container
