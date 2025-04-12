@@ -140,6 +140,8 @@ first_ml_project/
 
 #Postgress
 /pg-data
+/postgres_data
+/pgadmin_data
 
 # Spyder project settings
 .spyderproject
