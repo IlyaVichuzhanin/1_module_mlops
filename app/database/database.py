@@ -23,7 +23,7 @@ def get_session():
         yield session
 
 def init_db():
-    SQLModel.metadata.drop_all(engine)
+    #SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     
     test_user_1 = User(email="Bob", password="123")

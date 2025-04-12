@@ -3,14 +3,16 @@ from sqlmodel import SQLModel, Field, Relationship, Column
 from typing import Optional, List
 from uuid import UUID, uuid4
 import sqlalchemy.dialects.postgresql as pg
+from typing import TYPE_CHECKING, Optional, List
+if TYPE_CHECKING:
+    from models.user import User
 
 
 class Balance(SQLModel, table=True):
-    #__tablename__="balance"
-    id: UUID = Field(sa_column=Column(pg.UUID, primary_key=True, unique=True, default=uuid4))
-    current_balance: float
-    user_id: int = Field(foreign_key="user.id", unique=True)
-    user: "User" = Relationship(back_populates="balance")
+    id: UUID = Field(primary_key=True, unique=True, default=uuid4)
+    current_balance: float = Field(index=True, default=0)
+    user_id: UUID = Field(default=None, foreign_key="user.id")
+    user: Optional["User"] = Relationship(back_populates="balance")
 
 
 class Config:
