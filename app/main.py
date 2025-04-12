@@ -1,13 +1,5 @@
 from sqlmodel import SQLModel, Session, create_engine
 from database.config import get_settings
-
-
-
-engine = create_engine(url=get_settings().DATABASE_URL_psycopg, echo=True,pool_size=5, max_overflow=10)
-
-
-
-
 from typing import TYPE_CHECKING
 from fastapi import FastAPI
 from sqlmodel import Session
@@ -29,6 +21,7 @@ def index():
 
 
 if __name__ == "__main__":
+
     test_user =  User(id=1,email="Bob@yandex.ru", password="123")
     test_user2 = User(id=1,user_name="Jane", password="123")
 
@@ -43,6 +36,15 @@ if __name__ == "__main__":
         for user in users:
             print(f'id: {user.id} - {user.email}')
             print(type(user))
+
+
+
+
+# settings=get_settings()
+# print(settings.DB_HOST) 
+# print(settings.DB_PORT)
+# print(settings.DB_USER)
+# print(settings.DB_PASSWORD)
 
         
 

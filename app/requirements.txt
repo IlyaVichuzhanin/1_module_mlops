@@ -4,4 +4,6 @@ sqlalchemy
 sqlmodel
 pydantic_settings
 psycopg
+psycopg[binary,pool]
+asyncpg
 
