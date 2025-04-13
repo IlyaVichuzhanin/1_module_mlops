@@ -1,5 +1,16 @@
 from models.user import User
 from typing import List, Optional
+from sqlmodel import Session
+from models.balance import Balance
+from services.crud.balance import create_balance
+
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from database.database import engine
+    from models.balance import Balance
+    
+
 
 
 
@@ -20,9 +31,15 @@ def get_user_by_email(email:int, session) -> Optional[User]:
 
 
 def create_user(new_user: User, session) -> None:
+    balance = Balance(user_id=new_user.id)
+    create_balance(balance,session)
     session.add(new_user)
     session.commit()
     session.refresh(new_user)
+    # with Session(engine) as session:
+    #     session.add(new_user)
+    #     session.commit()
+    #     session.refresh(new_user)
 
 def delete_user_by_id(id:int, session) -> None:
     user = session.get(User, id)

@@ -50,7 +50,7 @@ def decrease_user_balance(user_id:int, transaction:Transaction, session) -> None
 def create_balance(new_balance: Balance, session) -> None:
     session.add(new_balance)
     session.commit()
-    session.refresh(new_balance)
+    #session.refresh(new_balance)
 
 def delete_balance_by_id(id:int, session) -> None:
     balance = session.get(Balance, id)

@@ -1,7 +1,7 @@
 import datetime
-from sqlmodel import SQLModel, Field, Relationship, Column
+from sqlmodel import SQLModel, Field, Relationship, Column, ForeignKey, Integer
 from typing import Optional, List
-from uuid import UUID, uuid4
+import uuid
 import sqlalchemy.dialects.postgresql as pg
 from typing import TYPE_CHECKING, Optional, List
 if TYPE_CHECKING:
@@ -9,14 +9,11 @@ if TYPE_CHECKING:
 
 
 class Balance(SQLModel, table=True):
-    id: UUID = Field(primary_key=True, unique=True, default=uuid4)
+    __tablename__='balances'
+    id: Optional[int] = Field(primary_key=True, unique=True, default=None)
     current_balance: float = Field(index=True, default=0)
-    user_id: UUID = Field(default=None, foreign_key="user.id")
-    user: Optional["User"] = Relationship(back_populates="balance")
+    user_id: int = Field(sa_column=Column(Integer, ForeignKey("users.id", ondelete="SET NULL", onupdate="CASCADE")))
 
-
-class Config:
-    arbitrary_types_allowed = True
 
 
 
