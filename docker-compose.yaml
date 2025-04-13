@@ -3,7 +3,7 @@ services:
     build: ./app/
     image: first-ml-service:latest
     container_name: first-ml-service-container-app
-    # command: uvicorn api:app --host 0.0.0.0 --port 8080
+    command: uvicorn api:app --host 0.0.0.0 --port 8080
     restart: unless-stopped
     depends_on:
       - postgres
