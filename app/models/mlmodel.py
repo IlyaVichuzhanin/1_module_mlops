@@ -1,11 +1,19 @@
-from transformers import (AutoTokenizer, AutoModelForSequenceClassification, 
-                          TrainingArguments, Trainer)
+import torch
+from PIL import Image
+
+import requests
+from transformers import AutoImageProcessor, AutoModelForImageClassification, ViTForImageClassification
+
+
+
 
 
 class MLmodel:
 
-    def __init__(self, urlPath:str, num_labels:int):
-        self.__model= AutoModelForSequenceClassification.from_pretrained(urlPath,num_labels)
+    def __init__(self):
+        self.__model= AutoModelForImageClassification.from_pretrained("victor/animals-classifier")
+        self.__image_processor = AutoImageProcessor.from_pretrained("victor/animals-classifier")
+
 
     @property
     def model(self):

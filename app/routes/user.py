@@ -2,14 +2,17 @@ from fastapi import APIRouter, Body, HTTPException, status, Depends
 from database.database import get_session
 from models.user import User
 from services.crud import user as UserService
+from services.crud import request as RequestService
+from services.crud import response as ResponseService
 from typing import List
+from py_linq import Enumerable
 
 
 
-user_route = APIRouter()
+user_router = APIRouter()
 
 
-@user_route.post('/singup')
+@user_router.post('/singup')
 async def singup(data: User, session=Depends(get_session))->dict:
     if UserService.get_user_by_email(data.email, session) is not None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User with supplied username exists")
@@ -18,7 +21,7 @@ async def singup(data: User, session=Depends(get_session))->dict:
     return {"message": "User successfuly registred!"}
 
 
-@user_route.post('/singin')
+@user_router.post('/singin')
 async def singin(data: User, session=Depends(get_session))->dict:
     user = UserService.get_user_by_email(data.email, session)
     if user is None:
@@ -29,6 +32,14 @@ async def singin(data: User, session=Depends(get_session))->dict:
 
     return {"message": "User signed is successful!"}
 
-@user_route.get('/get_all_users',  response_model=List[User])
+@user_router.get('/get_all_users',  response_model=List[User])
 async def get_all_users(session=Depends(get_session))->List:
     return UserService.get_all_users(session)
+
+
+@user_router.get('/get_user_predictions/{user_id}',  response_model=List[tuple])
+async def get_user_predictions(user_id: int, session=Depends(get_session))->List:
+    return ResponseService.get_user_predictions(user_id, session)
+    
+
+

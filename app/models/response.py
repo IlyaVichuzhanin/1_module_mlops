@@ -15,7 +15,7 @@ class Response(SQLModel, table=True):
     response: str= Field(index=True)
     date_time: str = Field(index=True, default=datetime.datetime.now())
     user_id: Optional[int] = Field(sa_column=Column(Integer, ForeignKey("users.id", ondelete="SET NULL", onupdate="CASCADE")))
-
+    request_id: Optional[int] = Field(sa_column=Column(Integer, ForeignKey("requests.id", ondelete="SET NULL", onupdate="CASCADE")))
 
 
 
