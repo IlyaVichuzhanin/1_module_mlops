@@ -101,7 +101,7 @@ services:
       - db
       - rabbitmq
     networks:
-      - event-planner-network
+      - myml-network
   pgadmin:
     image: dpage/pgadmin4:4.23 
     container_name: pgadmin4_container
