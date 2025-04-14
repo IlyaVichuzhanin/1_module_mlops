@@ -77,7 +77,7 @@ services:
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       - RABBITMW_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+       - ./rabbitmq:/var/lib/rabbitmq
     ports:
        - 15672:15672
        - 5672:5672
