@@ -1,5 +1,7 @@
 from models.response import Response
 from typing import List, Optional
+from services.crud import request as RequestService
+from services.crud import response as ResponseService
 
 
 
@@ -27,3 +29,13 @@ def delete_response_by_id(id:int, session) -> None:
         session.delete[response]
         session.commit()
         return
+    
+def get_user_predictions(user_id:int, session) -> Optional[List[tuple]]:
+
+    user_requests=RequestService.get_user_requests(user_id, session)
+    user_responses=get_user_responses(user_id, session)
+    result = list[tuple]
+    for request in user_requests:
+        relevant_response=next((response for response in user_responses if response.request_id == request.id), None)
+        result.append(request, relevant_response)
+    return result

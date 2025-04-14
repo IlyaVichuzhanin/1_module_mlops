@@ -15,6 +15,7 @@ class Request(SQLModel, table=True):
     image: bytes = Field(index=True, default=bytes)
     date_time: str = Field(index=True, default=datetime.datetime.now())
     user_id: Optional[int] = Field(sa_column=Column(Integer, ForeignKey("users.id", ondelete="SET NULL", onupdate="CASCADE")))
+    
 
 
 

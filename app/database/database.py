@@ -11,7 +11,7 @@ from services.crud.user import create_user
 from services.crud.admin import create_admin
 from services.crud.transaction import create_transaction
 from services.crud.request import create_request
-from services.crud.responses import create_response
+from app.services.crud.response import create_response
 
 
 engine = create_engine(url=get_settings().DATABASE_URL_psycopg, echo=True,pool_size=5, max_overflow=10)
