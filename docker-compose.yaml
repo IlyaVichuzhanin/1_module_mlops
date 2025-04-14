@@ -98,7 +98,7 @@ services:
     volumes:
       - ./ml_worker:/app
     depends_on:
-      - db
+      - postgres
       - rabbitmq
     networks:
       - myml-network
