@@ -1,42 +1,58 @@
 
 from typing import TYPE_CHECKING
+import uuid
 from fastapi import FastAPI
 from sqlmodel import Session
+from typing import Union
+from pathlib import Path
 import uvicorn
-if TYPE_CHECKING:
-    from database.database import init_db, engine
-    from services.crud.user import create_user, get_all_users
-    from models.user import User
+from database.database import init_db, engine
+from services.crud.user import create_user, get_all_users
+from models.user import User
+from models.transaction import Transaction 
+from services.crud.balance import create_balance, increase_user_balance, decrease_user_balance 
+from services.crud.transaction import get_user_transactions 
 
 
-# app=FastAPI()
-
-# @app.get('/')
-
-# def index():
-#     user_nick = User("123", "123", "123")
-#     return "Hello world!" + str(user_nick)w
+app = FastAPI(title="FastAPI, Docker, and Traefik")
 
 
-# if __name__ == "__main__":
-#     uvicorn.run('main:app', host='0.0.0.0', port=8080, reload=True)
+@app.get('/')
+def index():
+   return {'message': 'Everything online'}
 
 
 if __name__ == "__main__":
-    test_user = User(id=1,user_name="Bob", password="123")
-    test_user2 = User(id=1,user_name="Jane", password="123")
+    test_user1 =  User(id=uuid.uuid1,email="Bob@yandex.ru", password="123")
+    test_user2 = User(id=uuid.uuid1,email="Jane@yandex.ru", password="123")
 
     init_db()
     print("Init db has been succeded")
 
     with Session(engine) as session:
-        create_user(test_user, session)
+        create_user(test_user1, session)
         create_user(test_user2, session)
         users=get_all_users(session)
     
-    for user in users:
-        print(f'id: {user.id} - {user.email}')
-        print(type(user))
+        for user in users:
+            print(f'id: {user.id} - {user.email}')
+            print(type(user))
+
+    with Session(engine) as session2:
+        test_transaction_1=Transaction(id=uuid.uuid1, credits=54, date_time='11.05.2025', user_id=test_user1.id, user=test_user1)
+        increase_user_balance(test_user1, test_transaction_1, session2)
+        test_transaction_2=Transaction(id=uuid.uuid1, credits=8, date_time='13.06.2025', user_id=test_user1.id, user=test_user1)
+        decrease_user_balance(test_user1, test_transaction_2, session2)
+        test_transaction_3=Transaction(id=uuid.uuid1, credits=100, date_time='16.07.2025', user_id=test_user1.id, user=test_user1)
+        decrease_user_balance(test_user1, test_transaction_3, session2)
+        transactions = get_user_transactions(user_id=test_user1.id, session=session2)
+
+        for transaction in transactions:
+            print(f'user_email: {transaction.user.email} - {transaction.credits} - {transaction.date_time}')
+            print(type(transaction))
+
+
+        
 
 
 
