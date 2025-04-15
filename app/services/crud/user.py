@@ -11,9 +11,6 @@ if TYPE_CHECKING:
     from models.balance import Balance
     
 
-
-
-
 def get_all_users(session)->List[User]:
     return session.query(User).all()
 

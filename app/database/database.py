@@ -25,24 +25,23 @@ def init_db():
     SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     
-    # with Session(engine) as session:
 
-    #     test_user_1 = User(email="Bob", password="123")
-    #     test_user_2 = User(email="Sam", password="123")
-    #     test_user_3 = User(email="Alice", password="123")
-    #     test_admin_1 = Admin(email="Jack", password="123")
-    #     test_transaction_1=Transaction(credits=12, date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
-    #     test_response_1 = Response(response="some response", date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
-    #     test_request_1 = Request(image=bytearray, date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
+    test_user_1 = User(email="Bob", password="123")
+    test_user_2 = User(email="Sam", password="123")
+    test_user_3 = User(email="Alice", password="123")
+    test_admin_1 = Admin(email="Jack", password="123")
+    test_transaction_1=Transaction(credits=12, date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
+    test_response_1 = Response(response="some response", date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
+    test_request_1 = Request(image=bytearray, date_time='12.01.2025', user_id=test_user_1.id, user=test_user_1)
 
         
-    #     create_user(test_user_1,session)
-    #     create_user(test_user_2,session)
-    #     create_user(test_user_3,session)
-    #     create_admin(test_admin_1,session)
-    #     create_transaction(test_transaction_1,session)
-    #     create_response(test_response_1,session)
-    #     create_request(test_request_1,session)
+    create_user(test_user_1,get_session())
+    create_user(test_user_2,get_session())
+    create_user(test_user_3,get_session())
+    create_admin(test_admin_1,get_session())
+    create_transaction(test_transaction_1,get_session())
+    create_response(test_response_1,get_session())
+    create_request(test_request_1,get_session())
 
     
 

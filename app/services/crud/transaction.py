@@ -1,5 +1,8 @@
 from models.transaction import Transaction
+from models.user import User
 from typing import List, Optional
+from datetime import datetime
+from services.crud.balance import decrease_user_balance
 
 
 
@@ -27,3 +30,13 @@ def delete_transaction_by_id(id:int, session) -> None:
         session.delete[transaction]
         session.commit()
         return
+    
+def provide_transaction(user:User, session)-> None:
+    new_transaction=Transaction(
+      credits=5,
+      date_time=datetime.now(),
+      user_id=user.id)
+    create_transaction(new_transaction, session)
+    decrease_user_balance(user_id=user.id,transaction=new_transaction,session=session)
+
+    

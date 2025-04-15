@@ -5,9 +5,6 @@ import requests
 from transformers import AutoImageProcessor, AutoModelForImageClassification, ViTForImageClassification
 
 
-
-
-
 class MLmodel:
 
     def __init__(self):
@@ -18,4 +15,8 @@ class MLmodel:
     @property
     def model(self):
         return self.__model
+    
+    @property
+    def image_processor(self):
+        return self.__image_processor
     

@@ -3,6 +3,8 @@ import uvicorn
 from routes.home import home_router
 from routes.event import event_router
 from routes.user import user_router
+from routes.balance import user_balance_router
+from routes.ml import ml_router
 from fastapi import FastAPI
 import uvicorn
 from database.database import init_db
@@ -14,9 +16,9 @@ from database.database import init_db
 app=FastAPI()
 app.include_router(home_router, tags=['home'])
 app.include_router(event_router, prefix='/events', tags=['home'])
-app.include_router
-
-
+app.include_router(user_router)
+app.include_router(user_balance_router)
+app.include_router(ml_router)
 
 
 if __name__=='__main__':
