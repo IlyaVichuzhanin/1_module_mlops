@@ -14,6 +14,15 @@ class User(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, unique=True, default=None)
     email: str = Field(index=True)
     password: str = Field(index=True)
+    balance_id: Optional[int] = Relationship(back_populates="user_id", sa_relationship_kwargs={"lazy": "selectin"})
+    balance: Optional["Balance"] = Relationship(back_populates="user", sa_relationship_kwargs={"lazy": "selectin"})
+
+class Config:
+    """ Model configuration"""
+    validate_assignment=True
+    arbitrary_types_allowed=True
+
+
 
     
 
