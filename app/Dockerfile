@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt /app/
 
 # Install the Python dependencies
-RUN pip install --upgrade pip && pip install -r /app/requirements.txt
+RUN pip install --upgrade pip && pip install -r /app/requirements.txt && pip install torch===2.6.0
 
 # Copy the application code to the working directory
 #COPY . .
