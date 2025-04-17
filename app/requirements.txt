@@ -10,7 +10,7 @@ psycopg[binary,pool]
 asyncpg==0.28.0
 starlette==0.37.2
 py-linq
-torch
+#torch==2.6.0
 # PIL.Image
 transformers
 
