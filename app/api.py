@@ -22,5 +22,6 @@ app.include_router(ml_router)
 
 
 if __name__=='__main__':
+    print("1111111111111111112222222222222222222222222222222222222!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     uvicorn.run('api:app', host='0.0.0.0',port=8080, reload=True)
     init_db() 

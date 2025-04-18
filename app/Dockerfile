@@ -1,5 +1,5 @@
 # Use the official Python base image
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt /app/
 
 # Install the Python dependencies
-RUN pip install --upgrade pip && pip install -r /app/requirements.txt && pip install torch===2.6.0
+RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
 # Copy the application code to the working directory
 #COPY . .
