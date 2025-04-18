@@ -14,14 +14,13 @@ from database.database import init_db
 
 
 app=FastAPI()
+init_db() 
 app.include_router(home_router, tags=['home'])
 app.include_router(event_router, prefix='/events', tags=['home'])
 app.include_router(user_router)
 app.include_router(user_balance_router)
 app.include_router(ml_router)
 
-
-if __name__=='__main__':
-    print("1111111111111111112222222222222222222222222222222222222!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    uvicorn.run('api:app', host='0.0.0.0',port=8080, reload=True)
-    init_db() 
+if __name__=='__api__':
+        print("1111111111111111112222222222222222222222222222222222222!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        uvicorn.run('api:app', host='127.0.0.1',port=8080, reload=True)
