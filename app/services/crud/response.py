@@ -1,24 +1,23 @@
 from models.response import Response
 from typing import List, Optional
 from services.crud import request as RequestService
-from services.crud import response as ResponseService
 
 
 
-def get_all_responses(session)->List[Response]:
+def get_all_responses(session)->List["Response"]:
     return session.query(Response).all()
 
-def get_responce_by_id(id:int, session) -> Optional[Response]:
+def get_responce_by_id(id:int, session) -> Optional["Response"]:
     responce=session.get(Response, id)
     if responce:
         return responce
     return None
 
-def get_user_responses(user_id:int, session) -> Optional[List[Response]]:
+def get_user_responses(user_id:int, session) -> Optional[List["Response"]]:
     return session.query(Response).filter(Response.user_id==user_id).all()
 
 
-def create_response(new_response: Response, session) -> None:
+def create_response(new_response: "Response", session) -> None:
     session.add(new_response)
     session.commit()
     session.refresh(new_response)

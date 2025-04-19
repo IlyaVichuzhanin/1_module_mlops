@@ -8,8 +8,10 @@ from pathlib import Path
 import uvicorn
 from database.database import init_db, engine
 from services.crud.user import create_user, get_all_users
+from models.request import Request
+from models.response import Response
 from models.user import User
-
+from PIL import Image
 
 # app = FastAPI(title="FastAPI, Docker, and Traefik")
 

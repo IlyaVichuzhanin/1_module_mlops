@@ -1,10 +1,5 @@
-import datetime
-import uuid
-from sqlmodel import SQLModel, Field, Relationship, Column
-from typing import Optional, List
-from models.user import User
-from uuid import UUID, uuid4
-import sqlalchemy.dialects.postgresql as pg
+from sqlmodel import SQLModel, Field
+from typing import Optional
 
 
 

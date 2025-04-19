@@ -1,8 +1,4 @@
-import torch
-from PIL import Image
-
-import requests
-from transformers import AutoImageProcessor, AutoModelForImageClassification, ViTForImageClassification
+from transformers import AutoImageProcessor, AutoModelForImageClassification
 
 
 class MLmodel:

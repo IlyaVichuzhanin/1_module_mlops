@@ -1,20 +1,35 @@
 import datetime
-import uuid
-from sqlmodel import SQLModel, Field, Relationship, ForeignKey, Integer
-from typing import Optional, List
-from sqlalchemy import Column, DateTime, func
-from uuid import UUID, uuid4
-import sqlalchemy.dialects.postgresql as pg
-from typing import TYPE_CHECKING, Optional, List
+from sqlmodel import SQLModel, Field, Relationship, LargeBinary
+from typing import Optional
+from sqlalchemy import Column
+from typing import TYPE_CHECKING, Optional
+from PIL import Image
 if TYPE_CHECKING:
     from models.user import User
+    from models.response import Response
 
 class Request(SQLModel, table=True):
-    __tablename__='requests'
+    __tablename__="requests"
     id: Optional[int] = Field(primary_key=True, unique=True, default=None)
-    image: bytes = Field(index=True, default=bytes)
+    image: bytes = Field(sa_column=Column(LargeBinary), default=None)
     date_time: str = Field(index=True, default=datetime.datetime.now())
-    user_id: Optional[int] = Field(sa_column=Column(Integer, ForeignKey("users.id", ondelete="SET NULL", onupdate="CASCADE")))
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id")
+    user: Optional["User"] = Relationship(
+         back_populates="requests"
+    )
+    response: Optional["Response"] = Relationship(back_populates="request", sa_relationship_kwargs={'uselist': False})
+
+
+
+class Config:
+    """ Model configuration"""
+    validate_assignment=True
+    arbitrary_types_allowed=True
+
+class CreateRequest:
+    def __init__(self, image:Image):
+        #drawing = open(file_path, 'rb').read()
+        self.image_bytes = image.tobytes()
     
 
 

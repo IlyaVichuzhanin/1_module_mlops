@@ -1,5 +1,6 @@
 from models.request import Request
 from typing import List, Optional
+from sqlmodel import Session
 
 
 
@@ -17,7 +18,8 @@ def get_user_requests(user_id:int, session) -> Optional[List[Request]]:
 
 
 
-def create_request(new_request: Request, session) -> None:
+def create_request(new_request: "Request", session: "Session") -> None:
+    #new_request=Request(request.image_bytes)
     session.add(new_request)
     session.commit()
     session.refresh(new_request)

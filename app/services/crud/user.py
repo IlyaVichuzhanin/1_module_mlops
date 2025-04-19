@@ -1,42 +1,39 @@
-from models.user import User
-from typing import List, Optional
+
 from sqlmodel import Session
+import bcrypt
+from typing import TYPE_CHECKING,List, Optional
 from models.balance import Balance
 from services.crud.balance import create_balance
-
-
-from typing import TYPE_CHECKING
+from models.user import User
 if TYPE_CHECKING:
-    from database.database import engine
-    from models.balance import Balance
+    from models.user import CreateUser
+       
     
 
-def get_all_users(session)->List[User]:
+def get_all_users(session)->List["User"]:
     return session.query(User).all()
 
-def get_user_by_id(id:int, session) -> Optional[User]:
+def get_user_by_id(id:int, session) -> Optional["User"]:
     user=session.get(User, id)
     if user:
         return user
     return None
 
-def get_user_by_email(email:int, session) -> Optional[User]:
+def get_user_by_email(email:int, session) -> Optional["User"]:
     user = session.query(User).filter(User.email==email).first()
     if user:
         return user
     return None
 
 
-def create_user(new_user: User, session) -> None:
-    balance = Balance(user_id=new_user.id)
+def create_user(create_user: "CreateUser", session: Session) -> None:
+    password_bytes = bytes(create_user.password, 'utf-8')
+    new_user=User(email=create_user.email, hashed_password=__get_hash_password(password_bytes))
+    balance = Balance(user=new_user)
     create_balance(balance,session)
     session.add(new_user)
     session.commit()
     session.refresh(new_user)
-    # with Session(engine) as session:
-    #     session.add(new_user)
-    #     session.commit()
-    #     session.refresh(new_user)
 
 def delete_user_by_id(id:int, session) -> None:
     user = session.get(User, id)
@@ -44,3 +41,8 @@ def delete_user_by_id(id:int, session) -> None:
         session.delete[user]
         session.commit()
         return
+
+def __get_hash_password(password:str):
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password, salt)
+    

@@ -1,9 +1,8 @@
-from models.transaction import Transaction
 from models.user import User
 from models.mlmodel import MLmodel
 from  models.request import Request
 from  models.response import Response
-from typing import List, Optional
+from typing import Optional
 from io import BytesIO
 import PIL.Image as Image
 import torch

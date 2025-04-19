@@ -8,19 +8,19 @@ from routes.ml import ml_router
 from fastapi import FastAPI
 import uvicorn
 from database.database import init_db
-
-
-
+from models.user import User
+from models.transaction import Transaction
+from models.request import Request
 
 
 app=FastAPI()
-init_db() 
+init_db()
 app.include_router(home_router, tags=['home'])
 app.include_router(event_router, prefix='/events', tags=['home'])
 app.include_router(user_router)
 app.include_router(user_balance_router)
 app.include_router(ml_router)
 
-if __name__=='__api__':
-        print("1111111111111111112222222222222222222222222222222222222!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        uvicorn.run('api:app', host='127.0.0.1',port=8080, reload=True)
+if __name__=='__main__':
+        uvicorn.run('api:app', host='0.0.0.0',port=8080, reload=True)
+         
