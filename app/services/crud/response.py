@@ -30,11 +30,8 @@ def delete_response_by_id(id:int, session) -> None:
         return
     
 def get_user_predictions(user_id:int, session) -> Optional[List[tuple]]:
-
-    user_requests=RequestService.get_user_requests(user_id, session)
     user_responses=get_user_responses(user_id, session)
-    result = list[tuple]
-    for request in user_requests:
-        relevant_response=next((response for response in user_responses if response.request_id == request.id), None)
-        result.append(request, relevant_response)
+    result = []
+    for response in user_responses:
+        result.append((response.request, response))
     return result

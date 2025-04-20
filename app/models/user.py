@@ -6,10 +6,10 @@ if TYPE_CHECKING:
     from models.response import Response
     from models.request import Request
     
-class CreateUser:
-    def __init__(self, email:str, password:str):
-        self.email=email
-        self.password=password
+
+
+
+
 
 class User(SQLModel, table=True):
     __tablename__='users'
@@ -39,6 +39,16 @@ class User(SQLModel, table=True):
             "lazy": "selectin"
             }
         )
+    
+
+class SignUpUser(SQLModel, table=False):
+    email: Optional[str]  = Field(..., index=True, unique=True)
+    password: Optional[str]  = Field(..., index=True)
+
+class SignInUser(SQLModel, table=False):
+    email: Optional[str]  = Field(..., index=True, unique=True)
+    password: Optional[str]  = Field(..., index=True)
+
     
     
     

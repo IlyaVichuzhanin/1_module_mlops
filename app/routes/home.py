@@ -9,4 +9,4 @@ async def index()->dict:
     Корневой эндпоинт, возвращающий приветсвенное сообщение
 
     """
-    return {"message": "Hellow world"}
+    return {"message": "Hello world!!!"}

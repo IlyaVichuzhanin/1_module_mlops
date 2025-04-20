@@ -8,10 +8,12 @@ from pathlib import Path
 import uvicorn
 from database.database import init_db, engine
 from services.crud.user import create_user, get_all_users
-from models.request import Request
+from models.request import Request, CreateRequest
 from models.response import Response
 from models.user import User
+from models.mlrunner import MlRunner
 from PIL import Image
+import io
 
 # app = FastAPI(title="FastAPI, Docker, and Traefik")
 
@@ -24,43 +26,22 @@ from PIL import Image
 
 
 
-# if __name__=="__main__":
-#     test_user =  User(email="Bob@yandex.ru", password="123")
-#     test_user2 = User(email="Jane", password="123")
 
 
 
-# import logging
-
-# logger = logging.getLogger(__name__)
 
 
-# app = FastAPI(title="FastAPI, Docker, and Traefik")
 
 
-# @app.get('/')
-# def index():
-#     return {'message': 'Everything online'}
+# with Session(engine) as session:
+#     user=User(email="Bob", hashed_password=bytes(4))
+#     cr_request = CreateRequest(r"C:\Users\user\Downloads\pics_3.jpg")
+#     request=Request(image=cr_request.image_bytes)
+#     ml_runner = MlRunner(user=user)
+#     prediction = ml_runner.get_prediction(request=request, session=session)
 
+#     print(prediction)
 
-# @app.on_event("startup")
-# def on_startup():
-#     init_db()
-#     logger.info("Init db has been succeeded")
-
-#     # test_user =  User(email="Bob@yandex.ru", password="123")
-#     # test_user2 = User(email="Jane", password="123")
-#     # create_user(test_user)
-#     # create_user(test_user2)
-
-#     with Session(engine) as session:
-#         test_user =  User(email="Bob@yandex.ru", password="123")
-#         #test_user2 = User(email="Jane", password="123")
-#         create_user(test_user, session)
-#         #create_user(test_user2, session)
-#         #users = get_all_users(session)
-#         #for user in users:
-#         #    logger.info(f'id: {user.id} - {user.email}')
 
         
 

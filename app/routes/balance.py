@@ -1,27 +1,29 @@
 from fastapi import APIRouter, Body, HTTPException, status, Depends
 from database.database import get_session
-from models.user import User
 from models.balance import Balance
-from models.transaction import Transaction
-from services.crud import user as UserService
 from services.crud import balance as BalanceService
-from services.crud import response as ResponseService
 
 
 
 user_balance_router = APIRouter()
 
 
-@user_balance_router.get('/user_balance/{user_id}')
+@user_balance_router.get('/get_user_balance',  response_model=Balance)
 async def get_user_balance(user_id: int, session=Depends(get_session))->Balance:
     user_balance = BalanceService.get_balance_by_user_id(user_id, session)
     return user_balance
 
 
 
-@user_balance_router.put('/user_balance/{user_id}/')
-async def increase_user_balance(user_id:int, transaction: Transaction, session=Depends(get_session))->Balance:
-    BalanceService.increase_user_balance(user_id, transaction, session)
+@user_balance_router.put('/increase_user_balance')
+async def increase_user_balance(user_id:int, credits: float, session=Depends(get_session))->None:
+    BalanceService.increase_user_balance(user_id, credits, session)
     return {"message": "User balance has been increased!"}
+
+
+@user_balance_router.put('/decrease_user_balance')
+async def decrease_user_balance(user_id:int, session=Depends(get_session))->None:
+    BalanceService.decrease_user_balance(user_id, session)
+    return {"message": "User balance has been decreased!"}
 
 

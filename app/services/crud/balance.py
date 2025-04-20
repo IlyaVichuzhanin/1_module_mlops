@@ -6,28 +6,27 @@ from models.balance import Balance
 from models.transaction import Transaction
 from services.crud.transaction import create_transaction
     
-    
-
 
 
 def get_all_balances(session)->List["Balance"]:
     return session.query(Balance).all()
 
-def get_balance_by_id(id:int, session) -> Optional["Balance"]:
+def get_balance_by_id(id:int, session:Session) -> Optional["Balance"]:
     balance=session.get(Balance, id)
     if balance:
         return balance
     return None
 
-def get_balance_by_user_id(user_id:int, session) -> Optional["Balance"]:
-    balance = session.query(Balance).filter(Balance.user_id==user_id)
+def get_balance_by_user_id(user_id:int, session:Session) -> Optional["Balance"]:
+    statement = select(Balance).join(User).filter(User.id==user_id)
+    balance = session.exec(statement).first()
     if balance:
         return balance
     return None
 
-def increase_user_balance(user:User, credits:float, session:Session) -> None:
-    balance = session.query(Balance).join(User).where(User.id==user.id).first()
-    new_transaction = Transaction(credits=credits, user_id=user.id, user=user)
+def increase_user_balance(user_id:int, credits:float, session:Session) -> None:
+    balance = session.query(Balance).join(User).where(User.id==user_id).first()
+    new_transaction = Transaction(credits=credits, user_id=user_id)
     if isinstance(balance,Balance):
         create_transaction(new_transaction, session)
         balance.current_balance += new_transaction.credits
@@ -37,10 +36,10 @@ def increase_user_balance(user:User, credits:float, session:Session) -> None:
     return None
 
 
-def decrease_user_balance(user:User, session:Session) -> None:
-    balance = session.query(Balance).join(User).where(User.id==user.id).first()
+def decrease_user_balance(user_id:int, session:Session) -> None | str:
+    balance = session.query(Balance).join(User).where(User.id==user_id).first()
     current_price = get_current_price(session)
-    new_transaction = Transaction(credits=current_price.credits, user_id=user.id, user=user)
+    new_transaction = Transaction(credits=current_price.credits, user_id=user_id)
     if isinstance(balance,Balance):
         if balance.current_balance>=current_price.credits:
             create_transaction(new_transaction, session)

@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Session, create_engine
 from database.config import get_settings
-from models.user import CreateUser
+from models.user import SignUpUser
 from models.admin import Admin
 from models.request import Request
 from models.response import Response
@@ -26,29 +26,29 @@ def init_db():
     SQLModel.metadata.create_all(engine)
     
     with Session(engine) as session:
-        test_user_1 = CreateUser(email="Bob", password="123")
+        test_user_1 = SignUpUser(email="Bob", password="123")
         create_user(test_user_1,session)
-        test_user_2 = CreateUser(email="Sam", password="123")
+        test_user_2 = SignUpUser(email="Sam", password="123")
         create_user(test_user_2,session)
-        test_user_3 = CreateUser(email="Alice", password="123")
+        test_user_3 = SignUpUser(email="Alice", password="123")
         create_user(test_user_3,session)
         test_admin_1 = Admin(email="Jack", password="123")
         create_admin(test_admin_1,session)
         set_price(10, session)
         user1=get_user_by_id(1,session)
         user2=get_user_by_id(1,session)
-        increase_user_balance(user1, 100, session)
-        decrease_user_balance(user1, session)
-        increase_user_balance(user2, 50, session)
-        decrease_user_balance(user2,session)
+        increase_user_balance(1, 100, session)
+        decrease_user_balance(1, session)
+        increase_user_balance(2, 50, session)
+        decrease_user_balance(2,session)
 
-        image = Image.new('RGB', (100, 200))
-        image_bytes = image.tobytes("hex", "rgb")
-        new_request=Request(image=image_bytes)
-        create_request(new_request,session)
-        request_from_db = get_request_by_id(1,session)
-        response1 = Response(response="some responce", user_id=user1.id, user=user1, request_id=request_from_db.id, request=request_from_db)
-        create_response(response1, session)
+        # image = Image.new('RGB', (100, 200))
+        # image_bytes = image.tobytes("hex", "rgb")
+        # new_request=Request(image=image_bytes)
+        # create_request(new_request,session)
+        # request_from_db = get_request_by_id(1,session)
+        # response1 = Response(response="some responce", user_id=user1.id, user=user1, request_id=request_from_db.id, request=request_from_db)
+        # create_response(response1, session)
 
     
 

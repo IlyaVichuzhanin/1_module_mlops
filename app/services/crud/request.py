@@ -13,13 +13,12 @@ def get_request_by_id(id:int, session) -> Optional[Request]:
         return request
     return None
 
-def get_user_requests(user_id:int, session) -> Optional[List[Request]]:
+def get_user_requests(user_id:int, session:Session) -> Optional[List[Request]]:
     return session.query(Request).filter(Request.user_id==user_id).all()
 
 
 
 def create_request(new_request: "Request", session: "Session") -> None:
-    #new_request=Request(request.image_bytes)
     session.add(new_request)
     session.commit()
     session.refresh(new_request)

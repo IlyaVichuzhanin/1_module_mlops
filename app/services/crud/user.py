@@ -6,7 +6,8 @@ from models.balance import Balance
 from services.crud.balance import create_balance
 from models.user import User
 if TYPE_CHECKING:
-    from models.user import CreateUser
+    from models.user import SignUpUser
+    from models.signinuser import SignUpUser
        
     
 
@@ -19,16 +20,16 @@ def get_user_by_id(id:int, session) -> Optional["User"]:
         return user
     return None
 
-def get_user_by_email(email:int, session) -> Optional["User"]:
+def get_user_by_email(email:str, session:Session) -> Optional["User"]:
     user = session.query(User).filter(User.email==email).first()
     if user:
         return user
     return None
 
 
-def create_user(create_user: "CreateUser", session: Session) -> None:
+def create_user(create_user: "SignUpUser", session: Session) -> None:
     password_bytes = bytes(create_user.password, 'utf-8')
-    new_user=User(email=create_user.email, hashed_password=__get_hash_password(password_bytes))
+    new_user=User(email=create_user.email, hashed_password=get_hash_password(password_bytes))
     balance = Balance(user=new_user)
     create_balance(balance,session)
     session.add(new_user)
@@ -42,7 +43,7 @@ def delete_user_by_id(id:int, session) -> None:
         session.commit()
         return
 
-def __get_hash_password(password:str):
+def get_hash_password(password:str):
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(password, salt)
     

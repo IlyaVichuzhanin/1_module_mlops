@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class Request(SQLModel, table=True):
     __tablename__="requests"
     id: Optional[int] = Field(primary_key=True, unique=True, default=None)
-    image: bytes = Field(sa_column=Column(LargeBinary), default=None)
+    image_bytes: bytes = Field(sa_column=Column(LargeBinary), default=None)
     date_time: str = Field(index=True, default=datetime.datetime.now())
     user_id: Optional[int] = Field(default=None, foreign_key="users.id")
     user: Optional["User"] = Relationship(
@@ -26,10 +26,10 @@ class Config:
     validate_assignment=True
     arbitrary_types_allowed=True
 
-class CreateRequest:
-    def __init__(self, image:Image):
-        #drawing = open(file_path, 'rb').read()
-        self.image_bytes = image.tobytes()
+class CreateRequest(SQLModel, table=False):
+
+    image_path: str  = Field(..., index=True, unique=True)
+    image_bytes: Optional[bytes]  = Field(..., index=True)
     
 
 
