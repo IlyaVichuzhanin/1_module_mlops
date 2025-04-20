@@ -7,6 +7,7 @@ from services.ml import ml as MLService
 from services.crud.user import get_user_by_id
 from typing import List
 from models.mlmodel import MLmodel
+from services.rm.rm import send_task
 
 
 ml_router=APIRouter()
@@ -21,9 +22,35 @@ ml_model = MLmodel()
         )
 async def make_prediction(user_id:int, create_request:CreateRequest, session=Depends(get_session))->Response:
     
-    response=MLService.make_prediction(user_id, create_request, ml_model, session)
-    if response is None:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Model prediction has failed.")
-    else:
-        return response
+
+
+
+
+
+    try:
+        send_task(user_id, create_request,session)
+        return {"message": f"Task sent successfully!"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=e)
+
+
+
+
+
+
+
+# @ml_router.post(
+#         '/make_prediction',  
+#         response_model=Response,
+#         summary="ML endpoint",
+#         description="Send ml request"
+#         )
+# async def make_prediction(user_id:int, create_request:CreateRequest, session=Depends(get_session))->Response:
+    
+#     response=MLService.make_prediction(user_id, create_request, ml_model, session)
+#     if response is None:
+#         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Model prediction has failed.")
+#     else:
+#         return response
+
 

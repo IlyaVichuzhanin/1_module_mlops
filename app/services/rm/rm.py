@@ -1,4 +1,8 @@
 import pika
+from fastapi import APIRouter, Body, HTTPException, status, Depends
+from database.database import get_session
+from models.request import Request, CreateRequest
+from sqlmodel import Session
 
 connection_params=pika.ConnectionParameters(
     host='rabbitmq',
@@ -12,7 +16,12 @@ connection_params=pika.ConnectionParameters(
     blocked_connection_timeout=2
 )
 
-def send_task(message:str):
+def send_task(user_id:int, create_request:CreateRequest, session:Session):
+    
+    
+    
+    
+    
     connection=pika.BlockingConnection(connection_params)
     channel=connection.channel()
 
