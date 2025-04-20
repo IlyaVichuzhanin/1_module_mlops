@@ -28,21 +28,6 @@ import io
 
 
 
-
-
-
-
-
-# with Session(engine) as session:
-#     user=User(email="Bob", hashed_password=bytes(4))
-#     cr_request = CreateRequest(r"C:\Users\user\Downloads\pics_3.jpg")
-#     request=Request(image=cr_request.image_bytes)
-#     ml_runner = MlRunner(user=user)
-#     prediction = ml_runner.get_prediction(request=request, session=session)
-
-#     print(prediction)
-
-
         
 
 
