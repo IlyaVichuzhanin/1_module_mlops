@@ -19,9 +19,9 @@ import io
 
 class MlRunner:
 
-    def __init__(self, user:User):
+    def __init__(self, user:User, ml_model:MLmodel):
         self.__user = user
-        self.__mlmodel = MLmodel()
+        self.__mlmodel =ml_model
 
     @property
     def user(self):

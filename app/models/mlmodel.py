@@ -1,6 +1,8 @@
 from transformers import AutoImageProcessor, AutoModelForImageClassification
 
 
+
+
 class MLmodel:
 
     def __init__(self):

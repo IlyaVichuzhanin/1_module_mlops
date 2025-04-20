@@ -15,6 +15,18 @@ from models.mlrunner import MlRunner
 from PIL import Image
 import io
 
+# from services.ml import ml as MLService
+# from fastapi import APIRouter, Body, HTTPException, status, Depends
+# from database.database import get_session
+
+
+
+
+
+# create_request=CreateRequest(image_path=r'C:\Users\user\Downloads\pics_3.jpg')
+
+# response=MLService.make_prediction(1, create_request, Depends(get_session))
+
 # app = FastAPI(title="FastAPI, Docker, and Traefik")
 
 
@@ -23,6 +35,11 @@ import io
 #    return {"message": "Hello World"}
 # if __name__ == "__main__":
 #    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
+
+
+
+
+
 
 
 

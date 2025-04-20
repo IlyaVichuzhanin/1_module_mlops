@@ -14,8 +14,8 @@ connection_params=pika.ConnectionParameters(
     port=5672,
     virtual_host='/',
     credentials=pika.PlainCredentials(
-        username='rmuser',
-        password='rmpassword',
+        username='rabbitmq',
+        password='strongpassword',
     ),
     heartbeat=30,
     blocked_connection_timeout=2

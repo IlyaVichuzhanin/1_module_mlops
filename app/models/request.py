@@ -28,8 +28,7 @@ class Config:
 
 class CreateRequest(SQLModel, table=False):
 
-    image_path: str  = Field(..., index=True, unique=True)
-    image_bytes: Optional[bytes]  = Field(..., index=True)
+    image_path: str  = Field(..., index=True)
     
 
 
