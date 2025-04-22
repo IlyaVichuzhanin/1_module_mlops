@@ -2,6 +2,7 @@ from sqlmodel import Session, select
 from sqlalchemy import desc
 from typing import Optional
 from models.price import Price
+import uuid
     
 
 

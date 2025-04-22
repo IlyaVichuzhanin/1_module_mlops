@@ -4,16 +4,17 @@ from typing import Optional
 from sqlalchemy import Column
 from typing import TYPE_CHECKING, Optional
 from PIL import Image
+import uuid
 if TYPE_CHECKING:
     from models.user import User
     from models.response import Response
 
 class Request(SQLModel, table=True):
     __tablename__="requests"
-    id: Optional[int] = Field(primary_key=True, unique=True, default=None)
-    image_bytes: bytes = Field(sa_column=Column(LargeBinary), default=None)
+    id: Optional[uuid.UUID] = Field(primary_key=True, unique=True, default_factory=uuid.uuid4)
+    image: Optional[str] = Field(index=True)
     date_time: str = Field(index=True, default=datetime.datetime.now())
-    user_id: Optional[int] = Field(default=None, foreign_key="users.id")
+    user_id: Optional[uuid.UUID] = Field(foreign_key="users.id")
     user: Optional["User"] = Relationship(
          back_populates="requests"
     )

@@ -4,6 +4,7 @@ from models.user import SignUpUser
 from models.admin import Admin
 from models.request import Request
 from models.response import Response
+import uuid
 
 from services.crud.user import create_user, get_user_by_id
 from services.crud.admin import create_admin
@@ -26,21 +27,24 @@ def init_db():
     SQLModel.metadata.create_all(engine)
     
     with Session(engine) as session:
-        test_user_1 = SignUpUser(email="Bob", password="123")
+        test_user_1_id=uuid.uuid4()
+        test_user_1 = SignUpUser(email="Bob", password="123", id=test_user_1_id)
         create_user(test_user_1,session)
-        test_user_2 = SignUpUser(email="Sam", password="123")
+        test_user_2_id=uuid.uuid4()
+        test_user_2 = SignUpUser(email="Sam", password="123", id=test_user_2_id)
         create_user(test_user_2,session)
-        test_user_3 = SignUpUser(email="Alice", password="123")
+        test_user_3_id=uuid.uuid4()
+        test_user_3 = SignUpUser(email="Alice", password="123", id=test_user_3_id)
         create_user(test_user_3,session)
-        test_admin_1 = Admin(email="Jack", password="123")
+        test_admin_id=uuid.uuid4()
+        test_admin_1 = Admin(email="Jack", password="123",id=test_admin_id)
         create_admin(test_admin_1,session)
         set_price(10, session)
-        user1=get_user_by_id(1,session)
-        user2=get_user_by_id(1,session)
-        increase_user_balance(1, 100, session)
-        decrease_user_balance(1, session)
-        increase_user_balance(2, 50, session)
-        decrease_user_balance(2,session)
+
+        increase_user_balance(test_user_1_id, 100, session)
+        decrease_user_balance(test_user_1_id, session)
+        increase_user_balance(test_user_2_id, 50, session)
+        decrease_user_balance(test_user_2_id,session)
 
         # image = Image.new('RGB', (100, 200))
         # image_bytes = image.tobytes("hex", "rgb")

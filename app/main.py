@@ -10,24 +10,18 @@ from database.database import init_db, engine
 from services.crud.user import create_user, get_all_users
 from models.request import Request, CreateRequest
 from models.response import Response
-from models.user import User
-from models.mlrunner import MlRunner
+from models.user import SignUpUser
 from PIL import Image
 import io
+import json
+import uuid
 
-# from services.ml import ml as MLService
-# from fastapi import APIRouter, Body, HTTPException, status, Depends
-# from database.database import get_session
-
-
-
-
-
-# create_request=CreateRequest(image_path=r'C:\Users\user\Downloads\pics_3.jpg')
-
-# response=MLService.make_prediction(1, create_request, Depends(get_session))
 
 # app = FastAPI(title="FastAPI, Docker, and Traefik")
+
+
+# test_user_1_id=uuid.uuid4()
+# test_user_1 = SignUpUser(email="Bob", password="123", id=str(test_user_1_id))
 
 
 # @app.get("/")
@@ -35,7 +29,6 @@ import io
 #    return {"message": "Hello World"}
 # if __name__ == "__main__":
 #    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
-
 
 
 

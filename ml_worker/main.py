@@ -1,45 +1,37 @@
-import pika
-import time
-import logging
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s -%(name)s - %(levelname)s - %(message)s'
-)
-
-logger = logging.getLogger(__name__)
-
-connection_params=pika.ConnectionParameters(
-    host='rabbitmq',
-    port=5672,
-    virtual_host='/',
-    credentials=pika.PlainCredentials(
-        username='rabbitmq',
-        password='strongpassword',
-    ),
-    heartbeat=30,
-    blocked_connection_timeout=2
-)
-
-connection=pika.BlockingConnection(connection_params)
-channel=connection.channel()
-queue_name = 'ml_task_queue'
-channel.queue_declare(queue=queue_name)
+from app.services.crud.user import get_user_by_id
+import json
+from mlrunner import MlRunner
+from fastapi import Depends
+from app.database.database import get_session
+from app.services.rm.rabbitmq import RabbitMQ
 
 
-def callback(ch, method, properties, body):
-    time.sleep(3)
-    logger.info(f"Received: '{body}'")
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+ml_runner = MlRunner()
+rabbitmq = RabbitMQ()
 
-channel.basic_consume(
-    queue=queue_name,
-    on_message_callback=callback,
-    auto_ack=False
-)
 
-logger.info('Waiting for messages. To exit, press Ctrl+C')
-channel.start_consuming()
+def process_message(ch, method, properties, body):
+
+
+    data_for_request=json.loads(body)
+    user_id = data_for_request['user_id']
+    image_path = data_for_request['image_path']
+    user=get_user_by_id(user_id,session=Depends(get_session))
+
+
+
+    response=ml_runner.get_prediction(image_path=image_path, user=user)
+
+
+
+rabbitmq.consume(queue_name="ml_request", callback=process_message)
+
+
+
+
+
+
+
 
 
 

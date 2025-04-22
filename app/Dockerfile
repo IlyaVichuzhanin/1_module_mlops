@@ -16,5 +16,6 @@ RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 # Expose the port on which the application will run
 EXPOSE 8080
 
+
 # Run the FastAPI application using uvicorn server
 CMD ["python", "api.py"]

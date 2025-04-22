@@ -5,26 +5,27 @@ from services.crud.price import get_current_price
 from models.balance import Balance
 from models.transaction import Transaction
 from services.crud.transaction import create_transaction
+import uuid
     
 
 
 def get_all_balances(session)->List["Balance"]:
     return session.query(Balance).all()
 
-def get_balance_by_id(id:int, session:Session) -> Optional["Balance"]:
+def get_balance_by_id(id:uuid.UUID, session:Session) -> Optional["Balance"]:
     balance=session.get(Balance, id)
     if balance:
         return balance
     return None
 
-def get_balance_by_user_id(user_id:int, session:Session) -> Optional["Balance"]:
+def get_balance_by_user_id(user_id:uuid.UUID, session:Session) -> Optional["Balance"]:
     statement = select(Balance).join(User).filter(User.id==user_id)
     balance = session.exec(statement).first()
     if balance:
         return balance
     return None
 
-def increase_user_balance(user_id:int, credits:float, session:Session) -> None:
+def increase_user_balance(user_id:uuid.UUID, credits:float, session:Session) -> None:
     balance = session.query(Balance).join(User).where(User.id==user_id).first()
     new_transaction = Transaction(credits=credits, user_id=user_id)
     if isinstance(balance,Balance):
@@ -36,7 +37,7 @@ def increase_user_balance(user_id:int, credits:float, session:Session) -> None:
     return None
 
 
-def decrease_user_balance(user_id:int, session:Session) -> None | str:
+def decrease_user_balance(user_id:uuid.UUID, session:Session) -> None | str:
     balance = session.query(Balance).join(User).where(User.id==user_id).first()
     current_price = get_current_price(session)
     new_transaction = Transaction(credits=current_price.credits, user_id=user_id)
@@ -59,9 +60,18 @@ def create_balance(new_balance: "Balance", session: Session) -> None:
     session.commit()
     session.refresh(new_balance)
 
-def delete_balance_by_id(id:int, session) -> None:
+def delete_balance_by_id(id:uuid.UUID, session) -> None:
     balance = session.get(Balance, id)
     if balance:
         session.delete[balance]
         session.commit()
         return
+    
+
+def check_user_balance(user_id:uuid.UUID, session:Session)->bool:
+    user_balance=get_balance_by_user_id(user_id, session=session)
+    current_price=get_current_price(session)
+    if user_balance>=current_price:
+        return  True
+    else:
+        return False

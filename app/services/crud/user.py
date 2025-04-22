@@ -5,16 +5,16 @@ from typing import TYPE_CHECKING,List, Optional
 from models.balance import Balance
 from services.crud.balance import create_balance
 from models.user import User
+import uuid
 if TYPE_CHECKING:
     from models.user import SignUpUser
-    from models.signinuser import SignUpUser
        
     
 
 def get_all_users(session)->List["User"]:
     return session.query(User).all()
 
-def get_user_by_id(id:int, session) -> Optional["User"]:
+def get_user_by_id(id:uuid.UUID, session) -> Optional["User"]:
     user=session.get(User, id)
     if user:
         return user
@@ -36,7 +36,7 @@ def create_user(create_user: "SignUpUser", session: Session) -> None:
     session.commit()
     session.refresh(new_user)
 
-def delete_user_by_id(id:int, session) -> None:
+def delete_user_by_id(id:uuid.UUID, session) -> None:
     user = session.get(User, id)
     if user:
         session.delete[user]

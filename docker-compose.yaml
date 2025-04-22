@@ -66,7 +66,23 @@ services:
       timeout: 10s
       retries: 5
     tty: true
-    stdin_open: true   
+    stdin_open: true
+
+  ml_worker:
+    build: ./ml_worker/
+    image: event-planner-ml-worker:latest
+    container_name: first-ml-service-ml-worker
+    restart: unless-stopped
+    env_file:
+      - ./ml_worker/.env
+    volumes:
+      - ./ml_worker:/ml_worker
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - myml-network
+
   rabbitmq:
     image: rabbitmq:3.13.1-management-alpine
     container_name: first-ml-service-container-rabbitmq
@@ -88,20 +104,7 @@ services:
       retries: 3
     networks:
       - myml-network
-  ml_worker:
-    build: ./ml_worker/
-    image: event-planner-ml-worker:latest
-    container_name: event-planner-ml-worker
-    restart: unless-stopped
-    env_file:
-      - ./ml_worker/.env
-    volumes:
-      - ./ml_worker:/app
-    depends_on:
-      - postgres
-      - rabbitmq
-    networks:
-      - myml-network
+  
   pgadmin:
     image: dpage/pgadmin4:4.23 
     container_name: pgadmin4_container
