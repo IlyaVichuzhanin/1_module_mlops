@@ -1,30 +1,32 @@
-from app.services.crud.user import get_user_by_id
+from services.crud.user import get_user_by_id
+from services.crud.request import get_request_by_id
+from services.crud.response import create_response
 import json
 from mlrunner import MlRunner
 from fastapi import Depends
-from app.database.database import get_session
-from app.services.rm.rabbitmq import RabbitMQ
+from database.database import get_session
+from services.rm.rabbitmq import RabbitMQ
+from sqlmodel import SQLModel, Session, create_engine
+from database.config import get_settings
 
 
 ml_runner = MlRunner()
 rabbitmq = RabbitMQ()
+engine = create_engine(url=get_settings().DATABASE_URL_psycopg, echo=True,pool_size=5, max_overflow=10)
 
 
 def process_message(ch, method, properties, body):
 
-
     data_for_request=json.loads(body)
-    user_id = data_for_request['user_id']
-    image_path = data_for_request['image_path']
-    user=get_user_by_id(user_id,session=Depends(get_session))
+    request_id = data_for_request['request_id']
+    
+    with Session(engine) as session: 
+        new_request = get_request_by_id(id=request_id, session=session)
+        response=ml_runner.get_prediction(request=new_request)
+        create_response(new_response=response,session=session)
 
 
-
-    response=ml_runner.get_prediction(image_path=image_path, user=user)
-
-
-
-rabbitmq.consume(queue_name="ml_request", callback=process_message)
+rabbitmq.consume(queue_name="ml_task_queue", callback=process_message)
 
 
 

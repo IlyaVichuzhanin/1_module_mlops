@@ -43,7 +43,7 @@ class User(SQLModel, table=True):
     
 
 class SignUpUser(SQLModel, table=False):
-    id: Optional[uuid.UUID] = Field(primary_key=True, unique=True)
+    id: Optional[uuid.UUID] = Field(primary_key=True, unique=True, default_factory=uuid.uuid4)
     email: Optional[str]  = Field(..., index=True, unique=True)
     password: Optional[str]  = Field(..., index=True)
 

@@ -5,7 +5,7 @@ from typing import Optional
 
 class Settings(BaseSettings):
     DB_HOST: Optional[str] = None
-    DB_PORT: Optional[str] = None
+    DB_PORT: Optional[int] = None
     DB_USER: Optional[str] = None
     DB_PASSWORD: Optional[str] = None
     DB_NAME: Optional[str] = None

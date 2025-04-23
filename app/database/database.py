@@ -27,7 +27,7 @@ def init_db():
     SQLModel.metadata.create_all(engine)
     
     with Session(engine) as session:
-        test_user_1_id=uuid.uuid4()
+        test_user_1_id=uuid.UUID("773e3742-c9ae-4f10-85d8-da3d0d3490b6")
         test_user_1 = SignUpUser(email="Bob", password="123", id=test_user_1_id)
         create_user(test_user_1,session)
         test_user_2_id=uuid.uuid4()

@@ -2,6 +2,7 @@ from models.response import Response
 from typing import List, Optional
 from services.crud import request as RequestService
 import uuid
+from sqlmodel import Session
 
 
 def get_all_responses(session)->List["Response"]:
@@ -35,3 +36,11 @@ def get_user_predictions(user_id:uuid.UUID, session) -> Optional[List[tuple]]:
     for response in user_responses:
         result.append((response.request, response))
     return result
+
+def get_response_by_request_id(request_id:uuid.UUID, session:Session) -> Optional["Response"]:
+    response = session.query(Response).filter(Response.request_id==request_id).first()
+    if response:
+        return response
+    else:
+        return None
+

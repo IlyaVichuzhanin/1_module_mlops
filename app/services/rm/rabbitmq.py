@@ -9,7 +9,7 @@ class RabbitMQ:
         self.port = int(os.getenv('RABBITMQ_PORT', 5672))
         self.connection = None
         self.channel = None
-        self.heartbeat=30,
+        self.heartbeat=30
         self.blocked_connection_timeout=2
         self.__connect()
 
@@ -26,6 +26,8 @@ class RabbitMQ:
     def consume(self, queue_name, callback):
         if not self.channel:
             raise Exception("Connection is not established.")
+    
+        self.channel.queue_declare(queue=queue_name, durable=True)
         self.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
         self.channel.start_consuming()
 

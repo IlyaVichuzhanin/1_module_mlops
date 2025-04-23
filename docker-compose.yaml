@@ -11,6 +11,7 @@ services:
     - ./app/.env
     volumes:
       - ./app:/app
+      - shared-data:/app/shared
     networks:
       - myml-network
     # healthcheck:
@@ -76,7 +77,11 @@ services:
     env_file:
       - ./ml_worker/.env
     volumes:
-      - ./ml_worker:/ml_worker
+      - ./ml_worker:/app
+      - ./app/database:/app/database
+      - ./app/services:/app/services
+      - ./app/models:/app/models
+      - shared-data:/app/shared
     depends_on:
       - postgres
       - rabbitmq
@@ -127,6 +132,7 @@ services:
 volumes:
   postgres_data:
   rabbitmq_data:
+  shared-data:
 
 networks:
   myml-network:

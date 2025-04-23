@@ -26,32 +26,36 @@ def get_balance_by_user_id(user_id:uuid.UUID, session:Session) -> Optional["Bala
     return None
 
 def increase_user_balance(user_id:uuid.UUID, credits:float, session:Session) -> None:
-    balance = session.query(Balance).join(User).where(User.id==user_id).first()
-    new_transaction = Transaction(credits=credits, user_id=user_id)
-    if isinstance(balance,Balance):
-        create_transaction(new_transaction, session)
-        balance.current_balance += new_transaction.credits
-        session.add(balance)
-        session.commit()
-        session.refresh(balance)
+    user = session.get(User, user_id)
+    if user:
+        balance = session.get(Balance, user.balance_id)
+        if balance:
+            new_transaction = Transaction(credits=credits, user_id=user_id)
+            create_transaction(new_transaction, session)
+            balance.current_balance += new_transaction.credits
+            session.add(balance)
+            session.commit()
+            session.refresh(balance)
     return None
 
 
 def decrease_user_balance(user_id:uuid.UUID, session:Session) -> None | str:
-    balance = session.query(Balance).join(User).where(User.id==user_id).first()
-    current_price = get_current_price(session)
-    new_transaction = Transaction(credits=current_price.credits, user_id=user_id)
-    if isinstance(balance,Balance):
-        if balance.current_balance>=current_price.credits:
-            create_transaction(new_transaction, session)
-            balance.current_balance -= current_price.credits
-            session.add(balance)
-            session.commit()            
-            session.refresh(balance)
-        else:
-            return "Недостаточно средств для списания"
-    else:
-        return "Баланс пользователя не найден!"
+    user = session.get(User, user_id)
+    if user:
+        balance = session.get(Balance, user.balance_id)
+        if balance:
+            balance = session.get(Balance, user.balance_id)
+            current_price = get_current_price(session)
+            new_transaction = Transaction(credits=current_price.credits, user_id=user_id)
+            if balance.current_balance>=current_price.credits:
+                create_transaction(new_transaction, session)
+                balance.current_balance -= current_price.credits
+                session.add(balance)
+                session.commit()            
+                session.refresh(balance)
+            else:
+                return "Недостаточно средств для списания"
+    
     return None
 
 
@@ -71,7 +75,7 @@ def delete_balance_by_id(id:uuid.UUID, session) -> None:
 def check_user_balance(user_id:uuid.UUID, session:Session)->bool:
     user_balance=get_balance_by_user_id(user_id, session=session)
     current_price=get_current_price(session)
-    if user_balance>=current_price:
+    if user_balance.current_balance>=current_price.credits:
         return  True
     else:
         return False
