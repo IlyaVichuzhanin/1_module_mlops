@@ -4,7 +4,6 @@ from services.crud.response import create_response
 import json
 from mlrunner import MlRunner
 from fastapi import Depends
-from database.database import get_session
 from services.rm.rabbitmq import RabbitMQ
 from sqlmodel import SQLModel, Session, create_engine
 from database.config import get_settings

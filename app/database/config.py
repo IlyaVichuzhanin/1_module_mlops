@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     DB_USER: Optional[str] = None
     DB_PASSWORD: Optional[str] = None
     DB_NAME: Optional[str] = None
+    SECRET_KEY: Optional[str] = None
+    COOKIE_NAME: Optional[str] = None
 
     @property
     def DATABASE_URL_asyncpg(self):

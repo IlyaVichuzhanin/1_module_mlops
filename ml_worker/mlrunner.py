@@ -15,9 +15,6 @@ from sqlmodel import Session
 import io
 import uuid
 
-
-
-
 class MlRunner:
 
     def __init__(self):

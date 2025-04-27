@@ -27,9 +27,7 @@ def get_user_by_email(email:str, session:Session) -> Optional["User"]:
     return None
 
 
-def create_user(create_user: "SignUpUser", session: Session) -> None:
-    password_bytes = bytes(create_user.password, 'utf-8')
-    new_user=User(email=create_user.email, hashed_password=get_hash_password(password_bytes), id=create_user.id)
+def create_user(new_user: "User", session: Session) -> None:
     balance = Balance(user=new_user)
     create_balance(balance,session)
     session.add(new_user)

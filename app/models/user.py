@@ -16,7 +16,7 @@ class User(SQLModel, table=True):
     __tablename__='users'
     id: Optional[uuid.UUID] = Field(primary_key=True, unique=True, default_factory=uuid.uuid4)
     email: str  = Field(..., index=True, unique=True)
-    hashed_password: bytes  = Field(..., index=True)
+    hashed_password: str  = Field(..., index=True)
     balance_id: Optional[uuid.UUID] = Field(foreign_key="balances.id")
     balance: Optional["Balance"] = Relationship(back_populates="user")
     transactions: Optional[list["Transaction"]] = Relationship(

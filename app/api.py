@@ -8,18 +8,30 @@ from routes.price import price_router
 from fastapi import FastAPI
 import uvicorn
 from database.database import init_db
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app=FastAPI()
-init_db()
+
 
 app.include_router(home_router)
-app.include_router(user_router)
-app.include_router(user_balance_router)
-app.include_router(price_router)
-app.include_router(ml_router)
+app.include_router(user_router, prefix='/user')
+app.include_router(user_balance_router, prefix='/balance')
+app.include_router(price_router, prefix='/price')
+app.include_router(ml_router, prefix='/ml')
 
 
-if __name__=='__main__':
-        uvicorn.run('api:app', host='0.0.0.0',port=8080, reload=True)
+origins=["*"]
+app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+)
+
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
          
