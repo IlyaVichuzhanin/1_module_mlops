@@ -25,6 +25,7 @@ templates = Jinja2Templates(directory="view")
 async def index(request: Request):
 
     # token=request.cookies.get(settings.COOKIE_NAME)
+    # print(token)
     # user = await authenticate_cookie(token)
     # if user is None:
     #     user=None
