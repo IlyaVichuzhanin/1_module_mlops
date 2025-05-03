@@ -17,13 +17,13 @@ templates = Jinja2Templates(directory="view")
 
 @home_router.get("/", response_class=HTMLResponse)
 async def index(request: Request, session=Depends(get_session)):
-    token=request.cookies.get(settings.COOKIE_NAME)
-    if token:
-        user_email = await authenticate_cookie(token)
-        if user_email:
-            user = UserService.get_user_by_email(user_email,session)
-            if(user):
-                return templates.TemplateResponse("personal_cabinet.html", {"request": request})
+    # token=request.cookies.get(settings.COOKIE_NAME)
+    # if token:
+    #     user_email = await authenticate_cookie(token)
+    #     if user_email:
+    #         user = UserService.get_user_by_email(user_email,session)
+    #         if(user):
+    #             return templates.TemplateResponse("personal_cabinet.html", {"request": request})
     return templates.TemplateResponse("index.html", {"request": request})
             
  

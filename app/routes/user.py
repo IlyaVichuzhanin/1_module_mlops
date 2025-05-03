@@ -11,6 +11,7 @@ from forms.usersignupform import UserSignUpForm
 from fastapi.templating import Jinja2Templates
 from database.config import get_settings
 from fastapi.responses import RedirectResponse
+from auth.authanticate import authenticate_cookie
 
 
 
@@ -24,7 +25,7 @@ def signin(request: Request):
     return templates.TemplateResponse("signin.html", {"request": request})
 
 @user_router.post('/logout')
-def signin(request: Request):
+def logout(request: Request):
     request.cookies.clear()
     return templates.TemplateResponse("index.html", {"request": request})
 
@@ -49,8 +50,9 @@ async def register(response: Response, email: str = Form(...), password: str = F
         new_user=User(email=email, hashed_password=hashed_password)
         UserService.create_user(new_user, session)
         access_token=create_access_token(new_user.email)
-        response.set_cookie(key=settings.COOKIE_NAME, value=access_token, httponly=True, expires=settings.TIME_EXPIRES)
-    return RedirectResponse("/user/personal_account")
+        redirect=RedirectResponse(url="/user/personal_account")
+        redirect.set_cookie(key=settings.COOKIE_NAME, value=access_token, httponly=True, expires=settings.TIME_EXPIRES)
+    return redirect
 
 
 @user_router.post('/login')
@@ -61,21 +63,11 @@ async def login(response: Response, email: str = Form(...), password: str = Form
 
     if hash_password.verify_hash(password, user_exist.hashed_password):
         access_token=create_access_token(user_exist.email)
-        response.set_cookie(key=settings.COOKIE_NAME, value=access_token, httponly=True, expires=settings.TIME_EXPIRES)
-        return RedirectResponse("/user/personal_account")
+        redirect=RedirectResponse(url="/user/personal_account")
+        redirect.set_cookie(key=settings.COOKIE_NAME, value=access_token, httponly=True, expires=settings.TIME_EXPIRES)
+    return redirect
 
 
-
-
-
-# @user_router.get('/get_all_users',  response_model=List[User])
-# async def get_all_users(session=Depends(get_session))->List[User]:
-#     return UserService.get_all_users(session)
-
-
-# @user_router.get('/get_user_predictions/',  response_model=List[tuple])
-# async def get_user_predictions(user_id: int, session=Depends(get_session))->List[tuple]:
-#     return ResponseService.get_user_predictions(user_id, session)
 
 
 
