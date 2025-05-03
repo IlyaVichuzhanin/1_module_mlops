@@ -1,20 +1,18 @@
 from sqlmodel import SQLModel, Session, create_engine
-from contextlib import contextmanager
-from .config import get_settings
+from database.config import get_settings
 from models.user import User
 from models.admin import Admin
-from models.transaction import Transaction
-from models.request import Request
-from models.response import Response
-from models.balance import Balance
+import uuid
+from auth.hash_password import HashPassword
 from services.crud.user import create_user
 from services.crud.admin import create_admin
-from services.crud.transaction import create_transaction
-from services.crud.request import create_request
-from services.crud.responses import create_response
-from services.crud.balance import create_balance
+from services.crud.balance import increase_user_balance
+from services.crud.balance import decrease_user_balance
+from services.crud.price import set_price
+
 
 engine = create_engine(url=get_settings().DATABASE_URL_psycopg, echo=True,pool_size=5, max_overflow=10)
+hash_password = HashPassword() 
 
 def get_session():
     with Session(engine) as session:
@@ -23,23 +21,33 @@ def get_session():
 def init_db():
     SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
+    
+    with Session(engine) as session:
+        test_user_1_id=uuid.UUID("773e3742-c9ae-4f10-85d8-da3d0d3490b6")
+        hashed_password1=hash_password.create_hash("123")
+        test_user_1 = User(email="Bob", hashed_password=hashed_password1, id=test_user_1_id)
+        create_user(test_user_1,session)
+        test_user_2_id=uuid.UUID("45def698-96b5-47f6-b5a6-b4b4ee0b880c")
+        hashed_password2=hash_password.create_hash("123")
+        test_user_2 = User(email="Sam", hashed_password=hashed_password2, id=test_user_2_id)
+        create_user(test_user_2,session)
+        test_user_3_id=uuid.UUID("3870cf70-43df-4d6f-a9ba-b17ed055d99a")
+        hashed_password3=hash_password.create_hash("123")
+        test_user_3 = User(email="Alice", hashed_password=hashed_password3, id=test_user_3_id)
+        create_user(test_user_3,session)
+        test_admin_id=uuid.uuid4()
+        test_admin_1 = Admin(email="Jack", password="123",id=test_admin_id)
+        create_admin(test_admin_1,session)
+        set_price(10, session)
 
-    test_user_1 = User(id=1,user_name="Bob", password="123")
-    create_user(test_user_1)
-    test_user_2 = User(id=2,user_name="Sam", password="123")
-    create_user(test_user_2)
-    test_user_3 = User(id=3,user_name="Alice", password="123")
-    create_user(test_user_3)
-    test_admin_1 = Admin(id=1,user_name="Jack", password="123")
-    create_admin(test_admin_1)
-    test_transaction_1=Transaction(id=1, credits=12, date_time='12.01.2025', user_id=1, user=test_user_1)
-    create_transaction(test_transaction_1)
-    test_response_1 = Response(id=1, response="some response", date_time='12.01.2025', user_id=1, user=test_user_1)
-    create_response(test_response_1)
-    test_request_1 = Request(id=1, image=bytearray, date_time='12.01.2025', user_id=1, user=test_user_1)
-    create_request(test_request_1)
-    test_balance_1 = Balance(id=1, current_balance=15, user_id=1, user=test_user_1)
-    create_balance(test_balance_1)
+        increase_user_balance(test_user_1_id, 100, session)
+        decrease_user_balance(test_user_1_id, session)
+        increase_user_balance(test_user_2_id, 50, session)
+        decrease_user_balance(test_user_2_id,session)
+
+
+    
+
     
 
 

@@ -5,10 +5,13 @@ from typing import Optional
 
 class Settings(BaseSettings):
     DB_HOST: Optional[str] = None
-    DB_PORT: Optional[str] = None
+    DB_PORT: Optional[int] = None
     DB_USER: Optional[str] = None
     DB_PASSWORD: Optional[str] = None
     DB_NAME: Optional[str] = None
+    SECRET_KEY: Optional[str] = None
+    COOKIE_NAME: Optional[str] = None
+    TIME_EXPIRES: Optional[int] = None
 
     @property
     def DATABASE_URL_asyncpg(self):
@@ -18,7 +21,7 @@ class Settings(BaseSettings):
     def DATABASE_URL_psycopg(self):
         return f'postgresql+psycopg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
     
-    model_config=SettingsConfigDict(env_file='.env')
+    model_config=SettingsConfigDict(env_file='app\\database\\app.env') 
 
 @lru_cache()
 def get_settings()->Settings:

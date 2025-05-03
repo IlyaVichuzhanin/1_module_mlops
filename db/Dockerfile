@@ -1,5 +1,10 @@
-FROM postgres
-ENV POSTGRES_DB DB
-ENV POSTGRES_USER postgres
-ENV POSTGRES_PASSWORD password
-COPY init.sql /docker-entrypoint-initdb.d/
+FROM postgres:13
+
+ENV POSTGRES_DB=mydatabase
+ENV POSTGRES_USER=myuser
+ENV POSTGRES_PASSWORD=mypassword
+
+
+EXPOSE 5432
+
+VOLUME ./pgdata:/var/lib/postgresql/data

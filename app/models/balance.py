@@ -1,55 +1,29 @@
-import datetime
 from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional, List
-from models.user import User
+from typing import Optional
+from typing import TYPE_CHECKING, Optional
+import uuid
+if TYPE_CHECKING:
+    from models.user import User
 
 
 class Balance(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    current_balance: float
-    user_id: int = Field(foreign_key="user.id", unique=True)
-    user: User = Relationship(back_populates="balance")
+    __tablename__='balances'
+    id: Optional[uuid.UUID] = Field(primary_key=True, unique=True, default_factory=uuid.uuid4)
+    current_balance: float = Field(index=True, default=100)
+    user: Optional["User"] = Relationship(back_populates="balance", sa_relationship_kwargs={'uselist': False})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from models.transaction import Transaction
-
-# class Balance:
-#     def __init__(self):
-#         self.__currentBalance=0
-
-#     @property
-#     def currentBalance(self):
-#         return self.__currentBalance
+class Config:
+    """ Model configuration"""
+    validate_assignment=True
+    arbitrary_types_allowed=True
     
-#     def increaseBalance(self, transaction:Transaction):
-#         if transaction.credits>=0:
-#             self.__currentBalance+=transaction.credits
-#         else:
-#             return "Недопустимое значение"
-    
-#     def decreaseBalance(self, transaction:Transaction):
-#         if transaction.credits<0:
-#             return "Недопустимое значение"
-#         elif (self.__currentBalance<transaction.credits):
-#             return "Недостаточно средств на балансе"
-#         else:
-#             self.__currentBalance-=transaction.credits
-        
 
-    
+
+
+
+
+
+
+
+
