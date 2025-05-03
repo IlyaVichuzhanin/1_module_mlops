@@ -46,7 +46,7 @@ def decrease_user_balance(user_id:uuid.UUID, session:Session) -> None | str:
         if balance:
             balance = session.get(Balance, user.balance_id)
             current_price = get_current_price(session)
-            new_transaction = Transaction(credits=current_price.credits, user_id=user_id)
+            new_transaction = Transaction(credits=-current_price.credits, user_id=user_id)
             if balance.current_balance>=current_price.credits:
                 create_transaction(new_transaction, session)
                 balance.current_balance -= current_price.credits

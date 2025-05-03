@@ -17,8 +17,8 @@ settings=get_settings()
 @response_router.get("/get_user_predictions")
 async def get_user_predictions(request: Request, session=Depends(get_session)):
     token=request.cookies.get(settings.COOKIE_NAME)
-    user_email = await authenticate_cookie(token)
     if token:
+        user_email = await authenticate_cookie(token)
         if user_email:
             user = UserService.get_user_by_email(user_email,session)
             if(user):

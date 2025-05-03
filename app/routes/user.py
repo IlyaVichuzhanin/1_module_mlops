@@ -23,6 +23,11 @@ settings=get_settings()
 def signin(request: Request):
     return templates.TemplateResponse("signin.html", {"request": request})
 
+@user_router.post('/logout')
+def signin(request: Request):
+    request.cookies.clear()
+    return templates.TemplateResponse("index.html", {"request": request})
+
 @user_router.post('/signup')
 def signup(request: Request):
     return templates.TemplateResponse("signup.html", {"request": request}) 
