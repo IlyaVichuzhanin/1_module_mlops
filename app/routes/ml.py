@@ -24,8 +24,8 @@ settings=get_settings()
 @ml_router.post('/get_prediction', response_class=HTMLResponse)
 async def get_prediction(request:Request, file: UploadFile=File(...), session=Depends(get_session)):
     token=request.cookies.get(settings.COOKIE_NAME)
-    user_email = await authenticate_cookie(token)
     if token:
+        user_email = await authenticate_cookie(token)
         if user_email:
             user = UserService.get_user_by_email(user_email,session)
             if(user):

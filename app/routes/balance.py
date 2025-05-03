@@ -10,7 +10,7 @@ from services.crud import transaction as TransactionService
 from auth.hash_password import HashPassword
 from fastapi.templating import Jinja2Templates
 from database.config import get_settings
-from auth.authanticate import authenticate_cookie, authenticate
+from auth.authanticate import authenticate_cookie
 
 
 
@@ -22,8 +22,8 @@ settings=get_settings()
 @user_balance_router.get('/get_user_balance')
 async def get_user_balance(request: Request, session=Depends(get_session)):
     token=request.cookies.get(settings.COOKIE_NAME)
-    user_email = await authenticate_cookie(token)
     if token:
+        user_email = await authenticate_cookie(token)
         if user_email:
             user = UserService.get_user_by_email(user_email,session)
             if(user):
@@ -42,10 +42,9 @@ async def get_user_balance(request: Request, session=Depends(get_session)):
 
 @user_balance_router.post('/increase_user_balance')
 async def increase_user_balance(request: Request, credits: str = Form(...), session=Depends(get_session)):
-
     token=request.cookies.get(settings.COOKIE_NAME)
-    user_email = await authenticate_cookie(token)
     if token:
+        user_email = await authenticate_cookie(token)
         if user_email:
             user = UserService.get_user_by_email(user_email,session)
             if(user):

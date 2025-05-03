@@ -1,6 +1,7 @@
 from services.crud.user import get_user_by_id
 from services.crud.request import get_request_by_id
 from services.crud.response import create_response
+from services.crud.balance import decrease_user_balance
 import json
 from mlrunner import MlRunner
 from fastapi import Depends
@@ -22,7 +23,9 @@ def process_message(ch, method, properties, body):
     with Session(engine) as session: 
         new_request = get_request_by_id(id=request_id, session=session)
         response=ml_runner.get_prediction(request=new_request)
-        create_response(new_response=response,session=session)
+        if response:
+            create_response(new_response=response,session=session)
+            decrease_user_balance(user_id=response.user_id,session=session)
 
 
 rabbitmq.consume(queue_name="ml_task_queue", callback=process_message)
