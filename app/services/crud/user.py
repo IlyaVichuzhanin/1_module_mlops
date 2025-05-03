@@ -11,7 +11,7 @@ if TYPE_CHECKING:
        
     
 
-def get_all_users(session)->List["User"]:
+def get_all_users(session:Session)->List["User"]:
     return session.query(User).all()
 
 def get_user_by_id(id:uuid.UUID, session:Session) -> Optional["User"]:

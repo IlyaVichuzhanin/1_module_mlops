@@ -2,22 +2,17 @@ from sqlmodel import SQLModel, Session, create_engine
 from database.config import get_settings
 from models.user import User
 from models.admin import Admin
-from models.request import Request
-from models.response import Response
 import uuid
 from auth.hash_password import HashPassword
-from services.crud.user import create_user, get_user_by_id
+from services.crud.user import create_user
 from services.crud.admin import create_admin
 from services.crud.balance import increase_user_balance
 from services.crud.balance import decrease_user_balance
-from services.crud.request import create_request, get_request_by_id
-from services.crud.response import create_response
 from services.crud.price import set_price
-from PIL import Image
+
 
 engine = create_engine(url=get_settings().DATABASE_URL_psycopg, echo=True,pool_size=5, max_overflow=10)
 hash_password = HashPassword() 
-
 
 def get_session():
     with Session(engine) as session:
@@ -50,13 +45,6 @@ def init_db():
         increase_user_balance(test_user_2_id, 50, session)
         decrease_user_balance(test_user_2_id,session)
 
-        # image = Image.new('RGB', (100, 200))
-        # image_bytes = image.tobytes("hex", "rgb")
-        # new_request=Request(image=image_bytes)
-        # create_request(new_request,session)
-        # request_from_db = get_request_by_id(1,session)
-        # response1 = Response(response="some responce", user_id=user1.id, user=user1, request_id=request_from_db.id, request=request_from_db)
-        # create_response(response1, session)
 
     
 

@@ -8,10 +8,6 @@ if TYPE_CHECKING:
     from models.request import Request
     
 
-
-
-
-
 class User(SQLModel, table=True):
     __tablename__='users'
     id: Optional[uuid.UUID] = Field(primary_key=True, unique=True, default_factory=uuid.uuid4)
@@ -41,7 +37,7 @@ class User(SQLModel, table=True):
             }
         )
     
-
+    
 class SignUpUser(SQLModel, table=False):
     id: Optional[uuid.UUID] = Field(primary_key=True, unique=True, default_factory=uuid.uuid4)
     email: Optional[str]  = Field(..., index=True, unique=True)
@@ -51,9 +47,7 @@ class SignInUser(SQLModel, table=False):
     email: Optional[str]  = Field(..., index=True, unique=True)
     password: Optional[str]  = Field(..., index=True)
 
-    
-    
-    
+
 class Config:
     """ Model configuration"""
     validate_assignment=True

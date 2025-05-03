@@ -5,7 +5,7 @@ import uuid
 from sqlmodel import Session
 
 
-def get_all_responses(session)->List["Response"]:
+def get_all_responses(session:Session)->List["Response"]:
     return session.query(Response).all()
 
 def get_responce_by_id(id:uuid.UUID, session) -> Optional["Response"]:
@@ -14,8 +14,8 @@ def get_responce_by_id(id:uuid.UUID, session) -> Optional["Response"]:
         return responce
     return None
 
-def get_user_responses(user_id:uuid.UUID, session) -> Optional[List["Response"]]:
-    return session.query(Response).filter(Response.user_id==user_id).all()
+def get_user_responses(user_id:uuid.UUID, session:Session) -> Optional[List["Response"]]:
+    return session.query(Response).all()
 
 
 def create_response(new_response: "Response", session) -> None:
@@ -30,12 +30,6 @@ def delete_response_by_id(id:uuid.UUID, session) -> None:
         session.commit()
         return
     
-def get_user_predictions(user_id:uuid.UUID, session) -> Optional[List[tuple]]:
-    user_responses=get_user_responses(user_id, session)
-    result = []
-    for response in user_responses:
-        result.append((response.request, response))
-    return result
 
 def get_response_by_request_id(request_id:uuid.UUID, session:Session) -> Optional["Response"]:
     response = session.query(Response).filter(Response.request_id==request_id).first()

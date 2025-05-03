@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class Balance(SQLModel, table=True):
     __tablename__='balances'
     id: Optional[uuid.UUID] = Field(primary_key=True, unique=True, default_factory=uuid.uuid4)
-    current_balance: float = Field(index=True, default=0)
+    current_balance: float = Field(index=True, default=100)
     user: Optional["User"] = Relationship(back_populates="balance", sa_relationship_kwargs={'uselist': False})
 
 

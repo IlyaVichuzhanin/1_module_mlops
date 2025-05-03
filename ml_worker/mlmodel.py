@@ -1,13 +1,10 @@
-from transformers import AutoImageProcessor, AutoModelForImageClassification
-
-
-
+from transformers import BlipForConditionalGeneration, BlipProcessor
 
 class MLmodel:
 
     def __init__(self):
-        self.__model= AutoImageProcessor.from_pretrained("dima806/facial_emotions_image_detection")
-        self.__image_processor = AutoModelForImageClassification.from_pretrained("dima806/facial_emotions_image_detection")
+        self.__model= BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
+        self.__image_processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
 
 
     @property

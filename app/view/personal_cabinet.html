@@ -3,873 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет</title>
+    <title>Простая боковая панель</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar {
-            transition: all 0.3s ease;
+            transition: width 0.3s ease;
         }
-        .sidebar.collapsed {
-            width: 80px;
+        .sidebar-collapsed {
+            width: 250px;
         }
-        .sidebar.collapsed .nav-text {
-            display: none;
+        .sidebar-expanded {
+            width: 250px;
         }
-        .sidebar.collapsed .logo-text {
-            display: none;
+        .nav-text {
+            transition: opacity 0.2s ease;
         }
-        .sidebar.collapsed .user-info {
-            display: none;
+        .toggle-btn {
+            transition: transform 0.3s ease;
         }
-        .content {
-            transition: all 0.3s ease;
-        }
-        .content.expanded {
-            margin-left: 80px;
-        }
-        .active-tab {
-            background-color: #3b82f6;
-            color: white;
-        }
-        .active-tab:hover {
-            background-color: #3b82f6 !important;
-        }
-        .prediction-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .prediction-correct {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-        .prediction-incorrect {
-            background-color: #fee2e2;
-            color: #b91c1c;
-        }
-        .prediction-unknown {
-            background-color: #e5e7eb;
-            color: #4b5563;
+        .toggle-btn-rotated {
+            transform: rotate(180deg);
         }
     </style>
 </head>
-<body class="bg-gray-100">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Боковая панель -->
-        <div id="sidebar" class="sidebar bg-blue-800 text-white w-64 flex flex-col h-full fixed">
-            <!-- Заголовок и кнопка сворачивания -->
-            <div class="p-4 flex items-center justify-between border-b border-blue-700">
-                <div class="flex items-center">
-                    <i class="fas fa-user-circle text-3xl mr-3"></i>
-                    <span class="logo-text text-xl font-bold">Мой кабинет</span>
-                </div>
-                <button id="toggleSidebar" class="text-white focus:outline-none">
-                    <i class="fas fa-bars"></i>
-                </button>
+<body class="bg-gray-100 min-h-screen flex">
+    <!-- Боковая панель -->
+    <div id="sidebar" class="sidebar sidebar-collapsed h-full bg-white shadow-md fixed flex flex-col">
+        <!-- Заголовок -->
+        <div class="p-4 border-b border-gray-200 flex items-center justify-center h-16">
+            <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                <i class="fas fa-cube"></i>
             </div>
-            
-            <!-- Меню навигации -->
-            <nav class="flex-1 overflow-y-auto">
-                <ul class="py-2">
-                    <li>
-                        <a href="#" data-tab="dashboard" class="nav-item flex items-center p-3 hover:bg-blue-700 transition">
-                            <i class="fas fa-tachometer-alt mr-3"></i>
-                            <span class="nav-text">Главная</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="profile" class="nav-item flex items-center p-3 hover:bg-blue-700 transition">
-                            <i class="fas fa-user mr-3"></i>
-                            <span class="nav-text">Новое предсказание</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="predictions" class="nav-item flex items-center p-3 hover:bg-blue-700 transition">
-                            <i class="fas fa-history mr-3"></i>
-                            <span class="nav-text">История предсказаний</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="messages" class="nav-item flex items-center p-3 hover:bg-blue-700 transition">
-                            <i class="fas fa-envelope mr-3"></i>
-                            <span class="nav-text">История транзакций</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="settings" class="nav-item flex items-center p-3 hover:bg-blue-700 transition">
-                            <i class="fas fa-cog mr-3"></i>
-                            <span class="nav-text">Настройки</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="documents" class="nav-item flex items-center p-3 hover:bg-blue-700 transition">
-                            <i class="fas fa-file-alt mr-3"></i>
-                            <span class="nav-text">Документы</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-tab="statistics" class="nav-item flex items-center p-3 hover:bg-blue-700 transition">
-                            <i class="fas fa-chart-bar mr-3"></i>
-                            <span class="nav-text">Статистика</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            
-            <!-- Выход -->
-            <div class="p-4 border-t border-blue-700">
-                <a href="#" class="flex items-center p-2 hover:bg-blue-700 rounded transition">
-                    <i class="fas fa-sign-out-alt mr-3"></i>
-                    <span class="nav-text">Выход</span>
-                </a>
-            </div>
+            <span id="logo-text" class="nav-text ml-3 font-bold text-gray-700 hidden">MyApp</span>
         </div>
-        
-        <!-- Основное содержимое -->
-        <div id="content" class="content flex-1 overflow-y-auto ml-64">
-            <!-- Шапка -->
-            <header class="bg-white shadow-sm p-4 flex items-center justify-between">
-                <h1 class="text-2xl font-semibold text-gray-800" id="pageTitle">Главная</h1>
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
-                        <button class="text-gray-600 hover:text-gray-900 focus:outline-none">
-                            <i class="fas fa-bell text-xl"></i>
-                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs px-1 rounded-full">2</span>
-                        </button>
-                    </div>
-                    <div class="relative">
-                        <button class="text-gray-600 hover:text-gray-900 focus:outline-none">
-                            <i class="fas fa-question-circle text-xl"></i>
-                        </button>
-                    </div>
-                </div>
-            </header>
-            
-            <!-- Контент страницы -->
-            <main class="p-6">
-                <!-- Раздел Главная -->
-                <div id="dashboard" class="tab-content">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
-                                    <i class="fas fa-wallet text-xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-gray-500">Баланс</p>
-                                    <h3 class="text-2xl font-bold">24,500 ₽</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
-                                    <i class="fas fa-chart-line text-xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-gray-500">Активность</p>
-                                    <h3 class="text-2xl font-bold">87%</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded-lg shadow p-6">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
-                                    <i class="fas fa-tasks text-xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-gray-500">Задачи</p>
-                                    <h3 class="text-2xl font-bold">5/10</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <h2 class="text-xl font-semibold mb-4">Последние действия</h2>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Действие</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Сумма</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12.05.2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Пополнение счета</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">Успешно</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">+5,000 ₽</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10.05.2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Оплата услуг</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">Успешно</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-2,300 ₽</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">08.05.2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Перевод</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600">В обработке</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-1,500 ₽</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Раздел Профиль -->
-                <div id="profile" class="tab-content hidden">
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <h2 class="text-xl font-semibold mb-6">Создать предскажание по модели</h2>
+        <!-- Кнопки навигации -->
+        <nav class="flex-1 overflow-y-auto py-4">
+            <form action="/responses/get_user_predictions" method="get">
+                <a class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-file-alt">
+                        <button type="submit">История предсказаний
                         
-                        <form method="post" class="flex-1 p-6" action="/ml/get_prediction"  enctype="multipart/form-data">
-                          <div class="upload-container bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-md">
-                          <div class="p-6">
-                              <h2 class="text-2xl font-bold text-gray-800 mb-2">Загрузите изображение</h2>
-                              <p class="text-gray-600 mb-6">Поддерживаются форматы JPG до 5MB</p>
-                              
-                              <!-- Основная область загрузки -->
-                              <div id="upload-area" class="upload-area relative rounded-lg p-8 text-center cursor-pointer mb-4">
-                                  <input name="file" type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
-                                  <div id="upload-content" class="space-y-3">
-                                      <div class="mx-auto w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center">
-                                          <i class="fas fa-cloud-upload-alt text-3xl text-indigo-500"></i>
-                                      </div>
-                                      <h3 class="text-lg font-medium text-gray-800">Перетащите сюда изображение</h3>
-                                      <p class="text-sm text-gray-500">или кликните для выбора файла</p>
-                                      <div class="text-xs text-gray-400 mt-2">
-                                          <span class="inline-block px-2 py-1 bg-gray-100 rounded-md">JPG</span>
-                                      </div>
-                                  </div>
-                                  
-                                  <!-- Предпросмотр изображения -->
-                                  <img id="image-preview" class="image-preview mx-auto max-w-full h-auto rounded-lg object-cover" src="#" alt="Предпросмотр">
-                                  
-                                  <!-- Прогресс бар -->
-                                  <div id="progress-container" class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 hidden">
-                                      <div id="progress-bar" class="progress-bar bg-indigo-500 w-0"></div>
-                                  </div>
-                              </div>
-                              
-                              <!-- Успешная загрузка -->
-                              <div id="upload-success" class="upload-success bg-green-50 text-green-700 p-4 rounded-lg flex items-center mb-4">
-                                  <i class="fas fa-check-circle text-xl mr-3"></i>
-                                  <div>
-                                      <p class="font-medium">Изображение успешно загружено!</p>
-                                      <p id="file-name" class="text-sm opacity-80"></p>
-                                  </div>
-                              </div>
-                              
-                              <!-- Детали изображения -->
-                              <div id="image-details" class="hidden space-y-3 text-sm text-gray-600 border-t pt-4 mt-4">
-                                  <div class="flex justify-between">
-                                      <span>Размер:</span>
-                                      <span id="file-size" class="font-medium"></span>
-                                  </div>
-                                  <div class="flex justify-between">
-                                      <span>Разрешение:</span>
-                                      <span id="file-resolution" class="font-medium"></span>
-                                  </div>
-                                  <div class="flex justify-between">
-                                      <span>Формат:</span>
-                                      <span id="file-type" class="font-medium"></span>
-                                  </div>
-                              </div>
-                              
-                              <!-- Кнопки действий -->
-                              <div class="flex space-x-3 mt-6">
-                                  <form method="post" action="/ml/get_prediction" enctype="multipart/form-data">
-                                      <button id="upload-btn" class="flex-1 py-2 px-4 bg-indigo-600 rounded-lg text-white font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                                          Распознать
-                                      </button>
-                                  </form>
-                                  <button id="cancel-btn" class="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-gray-7 font-medium hover:bg-gray-50 transition hidden">
-                                      Отменить
-                                  </button>
-                              </div>
+                        </button>
+                    </i>
+                </a>
+            </form>
+            <form action="/balance/get_user_balance" method="get">
+                <a class="nav-item flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    <i class="fas fa-chart-bar">
+                        <button type="submit">Баланс
+                        
+                        </button>
+                    </i>
+                </a>
+            </form>
+        </nav>
+    </div>
+    <!-- Основное содержимое -->
+    <div id="main-content" class="flex-1 ml-[250px] p-8 transition-all duration-300">
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-6">Создать предсказание по модели</h2>
+            <form method="post" class="flex-1 p-6" action="/ml/get_prediction"  enctype="multipart/form-data">
+              <div class="upload-container bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-md">
+              <div class="p-6">
+                  <h2 class="text-2xl font-bold text-gray-800 mb-2">Загрузите изображение</h2>
+                  <p class="text-gray-600 mb-6">Поддерживаются форматы JPG до 5MB</p>
+                  
+                  <!-- Основная область загрузки -->
+                  <div id="upload-area" class="upload-area relative rounded-lg p-8 text-center cursor-pointer mb-4">
+                      <input name="file" type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
+                      <div id="upload-content" class="space-y-3">
+                          <div class="mx-auto w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center">
+                              <i class="fas fa-cloud-upload-alt text-3xl text-indigo-500"></i>
                           </div>
-                        </form>
-                    </div>
-                </div>
-                
-                <!-- Новая вкладка: История предсказаний -->
-                <div id="predictions" class="tab-content hidden">
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-xl font-semibold">История предсказаний</h2>
-                            <div class="flex space-x-3">
-                                <div class="relative">
-                                    <select class="appearance-none bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option>Все модели</option>
-                                        <option>ResNet50</option>
-                                        <option>VGG16</option>
-                                        <option>EfficientNet</option>
-                                    </select>
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                        <i class="fas fa-chevron-down text-sm"></i>
-                                    </div>
-                                </div>
-                                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
-                                    <i class="fas fa-filter mr-2"></i> Фильтр
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Модель</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Изображение</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Предсказание</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Точность</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15.06.2023 14:30</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ResNet50</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="w-16 h-16 bg-gray-200 rounded-md overflow-hidden">
-                                                <img src="https://via.placeholder.com/64" alt="Изображение" class="w-full h-full object-cover">
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Кошка</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">92.5%</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="prediction-badge prediction-correct">Верно</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-eye"></i></button>
-                                            <button class="text-gray-600 hover:text-gray-900"><i class="fas fa-download"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">14.06.2023 09:15</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">VGG16</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="w-16 h-16 bg-gray-200 rounded-md overflow-hidden">
-                                                <img src="https://via.placeholder.com/64" alt="Изображение" class="w-full h-full object-cover">
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Собака</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">87.2%</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="prediction-badge prediction-incorrect">Неверно</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-eye"></i></button>
-                                            <button class="text-gray-600 hover:text-gray-900"><i class="fas fa-download"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">13.06.2023 18:45</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">EfficientNet</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="w-16 h-16 bg-gray-200 rounded-md overflow-hidden">
-                                                <img src="https://via.placeholder.com/64" alt="Изображение" class="w-full h-full object-cover">
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Птица</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">95.1%</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="prediction-badge prediction-unknown">Не проверено</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-eye"></i></button>
-                                            <button class="text-gray-600 hover:text-gray-900"><i class="fas fa-download"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12.06.2023 11:20</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">ResNet50</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="w-16 h-16 bg-gray-200 rounded-md overflow-hidden">
-                                                <img src="https://via.placeholder.com/64" alt="Изображение" class="w-full h-full object-cover">
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Автомобиль</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">89.7%</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="prediction-badge prediction-correct">Верно</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-eye"></i></button>
-                                            <button class="text-gray-600 hover:text-gray-900"><i class="fas fa-download"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10.06.2023 16:10</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">VGG16</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="w-16 h-16 bg-gray-200 rounded-md overflow-hidden">
-                                                <img src="https://via.placeholder.com/64" alt="Изображение" class="w-full h-full object-cover">
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Цветок</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">78.3%</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="prediction-badge prediction-incorrect">Неверно</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-eye"></i></button>
-                                            <button class="text-gray-600 hover:text-gray-900"><i class="fas fa-download"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <!-- Пагинация -->
-                        <div class="flex items-center justify-between mt-6">
-                            <div class="text-sm text-gray-500">
-                                Показано с 1 по 5 из 23 записей
-                            </div>
-                            <div class="flex space-x-1">
-                                <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-angle-left"></i>
-                                </button>
-                                <button class="px-3 py-1 border rounded-lg bg-blue-600 text-white">1</button>
-                                <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">2</button>
-                                <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">3</button>
-                                <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">4</button>
-                                <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">5</button>
-                                <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-angle-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Раздел Сообщения -->
-                <div id="messages" class="tab-content hidden">
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <h2 class="text-xl font-semibold mb-4">Последние действия</h2>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Действие</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Сумма</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12.05.2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Пополнение счета</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">Успешно</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">+5,000 ₽</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10.05.2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Оплата услуг</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">Успешно</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-2,300 ₽</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">08.05.2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Перевод</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600">В обработке</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-1,500 ₽</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Раздел Настройки -->
-                <div id="settings" class="tab-content hidden">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h2 class="text-xl font-semibold mb-6">Настройки</h2>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="md:col-span-1">
-                                <div class="space-y-1">
-                                    <button data-setting-tab="account" class="setting-tab w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 active-tab">Аккаунт</button>
-                                    <button data-setting-tab="notifications" class="setting-tab w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100">Уведомления</button>
-                                    <button data-setting-tab="privacy" class="setting-tab w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100">Приватность</button>
-                                    <button data-setting-tab="appearance" class="setting-tab w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100">Внешний вид</button>
-                                </div>
-                            </div>
-                            
-                            <div class="md:col-span-2">
-                                <!-- Настройки аккаунта -->
-                                <div id="account-settings" class="setting-content">
-                                    <h3 class="text-lg font-medium mb-4">Настройки аккаунта</h3>
-                                    
-                                    <form class="space-y-4">
-                                        <div>
-                                            <label class="block text-gray-700 mb-1">Язык</label>
-                                            <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                                <option>Русский</option>
-                                                <option>English</option>
-                                                <option>Deutsch</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div>
-                                            <label class="block text-gray-700 mb-1">Часовой пояс</label>
-                                            <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                                <option>(GMT+3) Москва</option>
-                                                <option>(GMT+5) Екатеринбург</option>
-                                                <option>(GMT+7) Новосибирск</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="email-notifications" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                            <label for="email-notifications" class="ml-2 block text-gray-700">Получать уведомления по email</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="sms-notifications" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                            <label for="sms-notifications" class="ml-2 block text-gray-700">Получать SMS-уведомления</label>
-                                        </div>
-                                        
-                                        <div class="pt-4">
-                                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                                                Сохранить настройки
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                                
-                                <!-- Настройки уведомлений -->
-                                <div id="notifications-settings" class="setting-content hidden">
-                                    <h3 class="text-lg font-medium mb-4">Настройки уведомлений</h3>
-                                    <p class="text-gray-500 mb-4">Выберите, какие уведомления вы хотите получать и как.</p>
-                                    
-                                    <form class="space-y-4">
-                                        <div class="border-b pb-4">
-                                            <h4 class="font-medium mb-2">Электронная почта</h4>
-                                            <div class="space-y-2">
-                                                <div class="flex items-center justify-between">
-                                                    <label class="text-gray-700">Новые сообщения</label>
-                                                    <input type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                                </div>
-                                                <div class="flex items-center justify-between">
-                                                    <label class="text-gray-700">Обновления системы</label>
-                                                    <input type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                                </div>
-                                                <div class="flex items-center justify-between">
-                                                    <label class="text-gray-700">Новости и предложения</label>
-                                                    <input type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="border-b pb-4">
-                                            <h4 class="font-medium mb-2">Push-уведомления</h4>
-                                            <div class="space-y-2">
-                                                <div class="flex items-center justify-between">
-                                                    <label class="text-gray-700">Новые сообщения</label>
-                                                    <input type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                                </div>
-                                                <div class="flex items-center justify-between">
-                                                    <label class="text-gray-700">Напоминания</label>
-                                                    <input type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="pt-4">
-                                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                                                Сохранить настройки
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                                
-                                <!-- Настройки приватности -->
-                                <div id="privacy-settings" class="setting-content hidden">
-                                    <h3 class="text-lg font-medium mb-4">Настройки приватности</h3>
-                                    <p class="text-gray-500 mb-4">Управляйте, кто может видеть вашу информацию и активность.</p>
-                                    
-                                    <form class="space-y-4">
-                                        <div>
-                                            <label class="block text-gray-700 mb-1">Профиль</label>
-                                            <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                                <option>Публичный</option>
-                                                <option>Только друзья</option>
-                                                <option>Только я</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div>
-                                            <label class="block text-gray-700 mb-1">Активность</label>
-                                            <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                                <option>Публичная</option>
-                                                <option>Только друзья</option>
-                                                <option>Только я</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="search-visibility" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                            <label for="search-visibility" class="ml-2 block text-gray-700">Разрешить поиск моего профиля</label>
-                                        </div>
-                                        
-                                        <div class="pt-4">
-                                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                                                Сохранить настройки
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                                
-                                <!-- Настройки внешнего вида -->
-                                <div id="appearance-settings" class="setting-content hidden">
-                                    <h3 class="text-lg font-medium mb-4">Настройки внешнего вида</h3>
-                                    <p class="text-gray-500 mb-4">Настройте внешний вид приложения по вашему вкусу.</p>
-                                    
-                                    <form class="space-y-4">
-                                        <div>
-                                            <label class="block text-gray-700 mb-2">Тема</label>
-                                            <div class="flex space-x-4">
-                                                <label class="flex items-center space-x-2">
-                                                    <input type="radio" name="theme" value="light" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500">
-                                                    <span>Светлая</span>
-                                                </label>
-                                                <label class="flex items-center space-x-2">
-                                                    <input type="radio" name="theme" value="dark" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
-                                                    <span>Темная</span>
-                                                </label>
-                                                <label class="flex items-center space-x-2">
-                                                    <input type="radio" name="theme" value="system" class="h-4 w-4 text-blue-600 focus:ring-blue-500">
-                                                    <span>Как в системе</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        
-                                        <div>
-                                            <label class="block text-gray-700 mb-1">Размер шрифта</label>
-                                            <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                                <option>Маленький</option>
-                                                <option selected>Средний</option>
-                                                <option>Большой</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="pt-4">
-                                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                                                Сохранить настройки
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Раздел Документы -->
-                <div id="documents" class="tab-content hidden">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-xl font-semibold">Мои документы</h2>
-                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center">
-                                <i class="fas fa-plus mr-2"></i> Добавить документ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Раздел Статистика -->
-                <div id="statistics" class="tab-content hidden">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h2 class="text-xl font-semibold mb-6">Статистика</h2>
-                        
-                        <div class="mb-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-lg font-medium">Активность за последние 30 дней</h3>
-                                <select class="px-3 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option>30 дней</option>
-                                    <option>7 дней</option>
-                                    <option>90 дней</option>
-                                </select>
-                            </div>
-                            <div class="h-64 bg-gray-100 rounded flex items-center justify-center">
-                                <p class="text-gray-500">График активности будет здесь</p>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white border rounded-lg p-4">
-                                <h3 class="text-lg font-medium mb-3">Распределение по времени</h3>
-                                <div class="h-48 bg-gray-100 rounded flex items-center justify-center">
-                                <p class="text-gray-500">Круговая диаграмма будет здесь</p>
-                                </div>
-                                <div class="mt-4 grid grid-cols-2 gap-2">
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-blue-500 mr-2"></div>
-                                        <span class="text-sm">Утро (25%)</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-green-500 mr-2"></div>
-                                        <span class="text-sm">День (45%)</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-yellow-500 mr-2"></div>
-                                        <span class="text-sm">Вечер (20%)</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-3 h-3 bg-red-500 mr-2"></div>
-                                        <span class="text-sm">Ночь (10%)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-white border rounded-lg p-4">
-                                <h3 class="text-lg font-medium mb-3">Сравнение с предыдущим периодом</h3>
-                                <div class="space-y-3">
-                                    <div>
-                                        <div class="flex justify-between mb-1">
-                                            <span class="text-sm font-medium">Посещения</span>
-                                            <span class="text-sm font-medium text-green-600">+12%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-2">
-                                            <div class="bg-green-500 h-2 rounded-full" style="width: 65%"></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="flex justify-between mb-1">
-                                            <span class="text-sm font-medium">Действия</span>
-                                            <span class="text-sm font-medium text-green-600">+8%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-2">
-                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 45%"></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="flex justify-between mb-1">
-                                            <span class="text-sm font-medium">Время</span>
-                                            <span class="text-sm font-medium text-red-600">-5%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-2">
-                                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 30%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="mt-6">
-                                    <h4 class="font-medium mb-2">Рекомендации</h4>
-                                    <ul class="space-y-2 text-sm">
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                            <span>Попробуйте больше действий в утренние часы</span>
-                                        </li>
-                                        <li class="flex items-start">
-                                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                            <span>Используйте новые функции для экономии времени</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+                          <h3 class="text-lg font-medium text-gray-800">Перетащите сюда изображение</h3>
+                          <p class="text-sm text-gray-500">или кликните для выбора файла</p>
+                          <div class="text-xs text-gray-400 mt-2">
+                              <span class="inline-block px-2 py-1 bg-gray-100 rounded-md">JPG</span>
+                          </div>
+                      </div>
+                      <!-- Предпросмотр изображения -->
+                      <img id="image-preview" class="image-preview mx-auto max-w-full h-auto rounded-lg object-cover" src="#" alt="Предпросмотр">
+                      
+                      <!-- Прогресс бар -->
+                      <div id="progress-container" class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 hidden">
+                          <div id="progress-bar" class="progress-bar bg-indigo-500 w-0"></div>
+                      </div>
+                  </div>
+                  <!-- Успешная загрузка -->
+                  <div id="upload-success" class="upload-success bg-green-50 text-green-700 p-4 rounded-lg flex items-center mb-4">
+                      <i class="fas fa-check-circle text-xl mr-3"></i>
+                      <div>
+                          <p class="font-medium">Изображение успешно загружено!</p>
+                          <p id="file-name" class="text-sm opacity-80"></p>
+                      </div>
+                  </div>
+                  <!-- Детали изображения -->
+                  <div id="image-details" class="hidden space-y-3 text-sm text-gray-600 border-t pt-4 mt-4">
+                      <div class="flex justify-between">
+                          <span>Размер:</span>
+                          <span id="file-size" class="font-medium"></span>
+                      </div>
+                      <div class="flex justify-between">
+                          <span>Разрешение:</span>
+                          <span id="file-resolution" class="font-medium"></span>
+                      </div>
+                      <div class="flex justify-between">
+                          <span>Формат:</span>
+                          <span id="file-type" class="font-medium"></span>
+                      </div>
+                  </div>
+                  <!-- Кнопки действий -->
+                  <div class="flex space-x-3 mt-6">
+                      <form method="post" action="/ml/get_prediction" enctype="multipart/form-data">
+                          <button id="upload-btn" class="flex-1 py-2 px-4 bg-indigo-600 rounded-lg text-white font-medium hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                              Распознать
+                          </button>
+                      </form>
+                      <button id="cancel-btn" class="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-gray-7 font-medium hover:bg-gray-50 transition hidden">
+                          Отменить
+                      </button>
+                  </div>
+              </div>
+            </form>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Сворачивание/разворачивание боковой панели
-            const toggleSidebar = document.getElementById('toggleSidebar');
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            
-            toggleSidebar.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
-                content.classList.toggle('expanded');
-            });
-            
-            // Переключение между основными вкладками
-            const navItems = document.querySelectorAll('.nav-item');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            navItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Удаляем активный класс у всех элементов
-                    navItems.forEach(navItem => {
-                        navItem.classList.remove('active-tab');
-                    });
-                    
-                    // Добавляем активный класс к текущему элементам
-                    this.classList.add('active-tab');
-                    
-                    // Скрываем все содержимое вкладок
-                    tabContents.forEach(content => {
-                        content.classList.add('hidden');
-                    });
-                    
-                    // Показываем выбранное содержимое
-                    const tabId = this.getAttribute('data-tab');
-                    document.getElementById(tabId).classList.remove('hidden');
-                    
-                    // Обновляем заголовок страницы
-                    const pageTitle = document.getElementById('pageTitle');
-                    const navText = this.querySelector('.nav-text').textContent;
-                    pageTitle.textContent = navText;
-                });
-            });
-            
-            // Активируем первую вкладку по умолчанию
-            if (navItems.length > 0) {
-                navItems[0].classList.add('active-tab');
-            }
-            
-            // Переключение между вкладками настроек
-            const settingTabs = document.querySelectorAll('.setting-tab');
-            const settingContents = document.querySelectorAll('.setting-content');
-            
-            settingTabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Удаляем активный класс у всех элементов
-                    settingTabs.forEach(settingTab => {
-                        settingTab.classList.remove('active-tab');
-                    });
-                    
-                    // Добавляем активный класс к текущему элементу
-                    this.classList.add('active-tab');
-                    
-                    // Скрываем все содержимое вкладок
-                    settingContents.forEach(content => {
-                        content.classList.add('hidden');
-                    });
-                    
-                    // Показываем выбранное содержимое
-                    const tabId = this.getAttribute('data-setting-tab') + '-settings';
-                    document.getElementById(tabId).classList.remove('hidden');
-                });
-            });
-            
-            // Активируем первую вкладку настроек по умолчанию
-            if (settingTabs.length > 0) {
-                settingTabs[0].classList.add('active-tab');
-            }
-        });
-
-        // Элементы DOM
         const fileInput = document.getElementById('file-input');
         const uploadArea = document.getElementById('upload-area');
         const uploadContent = document.getElementById('upload-content');
@@ -970,7 +230,6 @@
             else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
             else return (bytes / 1048576).toFixed(1) + ' MB';
         }
-        
         // Симуляция загрузки
         uploadBtn.addEventListener('click', function() {
             // Показываем прогресс бар
@@ -1001,10 +260,8 @@
                 }
             }, 100);
         });
-        
         // Кнопка отмены
         cancelBtn.addEventListener('click', resetForm);
-        
         // Сброс формы
         function resetForm() {
             fileInput.value = '';

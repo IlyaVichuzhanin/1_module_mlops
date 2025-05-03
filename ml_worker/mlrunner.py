@@ -26,18 +26,18 @@ class MlRunner:
     
     def get_prediction(self, request:Request)->Optional[Response]:
         
-        request_image = Image.open(request.image)
+        request_image = Image.open(request.image).convert('RGB')
         inputs = self.__mlmodel.image_processor(request_image, return_tensors="pt")
-        with torch.no_grad():
-            logits = self.mlmodel.model(**inputs).logits
-
-        predicted_label = logits.argmax(-1).item()
+        outputs = self.__mlmodel.model.generate(**inputs)
+        image_description=self.__mlmodel.image_processor.decode(outputs[0], skip_special_tokens=True)
         response = Response(
             id=uuid.uuid4(),
-            response=self.mlmodel.model.config.id2label[predicted_label],
+            response=image_description,
             date_time=datetime.datetime.now(),
             user_id=request.user.id,
-            user=request.user
+            user=request.user,
+            request_id=request.id,
+            request=request
             )
 
         return response
